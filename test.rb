@@ -31,23 +31,25 @@ client = EventMachine::IRC::Client.new do
   on(:join) do |who,channel,names|  # called after joining a channel
     puts "on join"
     pp who,channel,names
-    message(channel, "taedaeaeae")
-  #  send_data("hi again test")
-    #
-    EM.add_timer(20,proc {
-      say Time.now.to_s 
-    })
+    message(channel, "hi")
+    #EM.add_timer(20,proc {
+    #  say Time.now.to_s 
+    #})
   end
 
   on(:message) do |source, target, message|  # called when being messaged
     puts "message: <#{source}> -> <#{target}>: #{message}"
     case message
     when /#{$nick}/i
-      say("Was geht ?")
-    when /wetter/i
-      say("Das Wetter nervt echt !")
-    when /heute/i
-      say("Man was ist hier heute los ???")
+      say("bitte?")
+    when /ruby/i
+      say("ruby ist toll:)")
+    when /devtal/i
+      say("das heisst doch /dev/tal...")
+    when /uhrzeit/i
+      say Time.now.to_s
+    when /datum/i
+      say Time.now.to_s
     end
   end
 
