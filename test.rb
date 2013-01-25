@@ -4,11 +4,14 @@ require 'em-irc'
 require 'logger'
 require 'pp'
 
-$channel="#devtaltest"
+$channel=ARGV[1]
+$nick=ARGV[0]
+
 
 client = EventMachine::IRC::Client.new do
   host 'irc.freenode.net'
   port '6667'
+
 
 
   def say(what)
@@ -16,7 +19,7 @@ client = EventMachine::IRC::Client.new do
   end
 
   on(:connect) do
-    nick('jch')
+    nick($nick)
   end
 
   on(:nick) do
@@ -28,7 +31,7 @@ client = EventMachine::IRC::Client.new do
   on(:join) do |who,channel,names|  # called after joining a channel
     puts "on join"
     pp who,channel,names
-    message(channel, "howdy all")
+    message(channel, "taedaeaeae")
   #  send_data("hi again test")
     #
     EM.add_timer(20,proc {
@@ -39,7 +42,7 @@ client = EventMachine::IRC::Client.new do
   on(:message) do |source, target, message|  # called when being messaged
     puts "message: <#{source}> -> <#{target}>: #{message}"
     case message
-    when /jch/i
+    when /#{$nick}/i
       say("Was geht ?")
     when /wetter/i
       say("Das Wetter nervt echt !")
