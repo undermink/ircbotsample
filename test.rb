@@ -58,7 +58,7 @@ client = EventMachine::IRC::Client.new do
     when /datum/i
       say Time.now.to_s
     when /wo bin ich/i
-      say(target)
+      say("hier: "+target)
     end
   end
 
