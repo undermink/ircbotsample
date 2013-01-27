@@ -9,7 +9,7 @@ $nick=ARGV[0]
 
 
 client = EventMachine::IRC::Client.new do
-  host 'irc.freenode.net'
+  host 'irc.chaostal.de'
   port '6667'
 
 
@@ -31,7 +31,12 @@ client = EventMachine::IRC::Client.new do
   on(:join) do |who,channel,names|  # called after joining a channel
     puts "on join"
     pp who,channel,names
-    message(channel, "hi")
+    #message(channel, "hi")
+    $names=['godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
+    case who
+    when /#{$names}/i
+      say("hi "+ who)
+    end
     #EM.add_timer(20,proc {
     #  say Time.now.to_s 
     #})
@@ -41,11 +46,13 @@ client = EventMachine::IRC::Client.new do
     puts "message: <#{source}> -> <#{target}>: #{message}"
     case message
     when /#{$nick}/i
-      say("bitte?")
+      $say_nick= ['hmm?','ja?','was?', source+'... was?', 'ja bitte '+source+' ?'].sample
+      say($say_nick)
     when /ruby/i
-      say("ruby ist toll:)")
-    when /devtal/i
-      say("das heisst doch /dev/tal...")
+      $say_ruby= ['ruby ist toll:)','ich bin auch in ruby geschrieben...','ich mag objekte:)','ruby? find ich gut:)'].sample
+      say($say_ruby)
+    when /chaostal/i
+      say("www.chaostal.de")
     when /uhrzeit/i
       say Time.now.to_s
     when /datum/i
