@@ -35,7 +35,6 @@ client = EventMachine::IRC::Client.new do
     $names=['godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
     case who
     when /#{$names}/i
-      sleep(2)
       say("hi "+ who)
     end
     #EM.add_timer(20,proc {
@@ -45,7 +44,6 @@ client = EventMachine::IRC::Client.new do
 
   on(:message) do |source, target, message|  # called when being messaged
     puts "message: <#{source}> -> <#{target}>: #{message}"
-    sleep(1)
     case message
     when /#{$nick}/i
       $say_nick= ['hmm?','ja?','was?', source+'... was?', 'ja bitte '+source+' ?'].sample
