@@ -32,11 +32,17 @@ client = EventMachine::IRC::Client.new do
     puts "on join"
     pp who,channel,names
     #message(channel, "hi")
-    $names=['godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
-    case who
-    when /#{$names}/i
-      say("hi "+ who)
+    $known=['dingsbums','godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
+
+    if $known.member?who then
+	say("hallo "+who)
+    else 
+	say("hi")
     end
+    #case who
+    #when /#{$known}/i
+    #  say("hi "+ who)
+    #end
     #EM.add_timer(20,proc {
     #  say Time.now.to_s 
     #})
