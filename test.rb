@@ -31,6 +31,7 @@ client = EventMachine::IRC::Client.new do
   on(:join) do |who,channel,names|  # called after joining a channel
     puts "on join"
     pp who,channel,names
+    topic($channel, "owned by a bot:)")
     #message(channel, "hi")
     $known=['dingsbums','godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
 
