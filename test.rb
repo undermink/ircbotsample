@@ -32,11 +32,10 @@ client = EventMachine::IRC::Client.new do
     puts "on join"
     pp who,channel,names
     topic($channel, "owned by a bot:)")
-    #message(channel, "hi")
-    $known=['dingsbums','godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
-
+    $known=['underm|nk','godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
+    $say_hi=['hallo ','hey ','hi ', 'der gute alte ','ah... hi ','willkommen '].sample
     if $known.member?who then
-	say("hallo "+who)
+	say($say_hi+who)
     else 
 	say("hi")
     end
