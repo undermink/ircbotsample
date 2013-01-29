@@ -15,6 +15,7 @@ client = EventMachine::IRC::Client.new do
 
 
   def say(what)
+    sleep 2
     message($channel,what)
   end
 
