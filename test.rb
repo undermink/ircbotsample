@@ -5,6 +5,7 @@ require 'logger'
 require 'pp'
 
 $channel=ARGV[1]
+$channel2=ARGV[2]
 $nick=ARGV[0]
 $known=['underm|nk','godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
 class Matcher
@@ -28,9 +29,9 @@ client = EventMachine::IRC::Client.new do
   port '9999'
   realname $nick
   ssl true
-  def say(what)
+  def say(target,what)
     sleep 2
-    message($channel,what)
+    message(target,what)
   end
 
   on(:connect) do
@@ -39,6 +40,7 @@ client = EventMachine::IRC::Client.new do
 
   on(:nick) do
     join($channel)
+    join($channel2)
     puts "on nick"
   #  join('#private', 'key')
   end
@@ -50,9 +52,11 @@ client = EventMachine::IRC::Client.new do
 
     say_hi=['hallo ','hey ','hi ', 'der gute alte ','ah... hi ','willkommen '].sample
     if $known.member?(who) then
-      say(say_hi+who)
+      send_data("mode "+ channel + " +o "+ who)
+      #pp "OP " + who
+      say(channel, say_hi+who)
     else
-      say("hi")
+      say(channel,"hi")
     end
   #case who
   #when / #{$known}/i
@@ -78,20 +82,20 @@ client = EventMachine::IRC::Client.new do
     when /#{$nick}/i
       case message.downcase
       when ma(zeit)
-        say Time.now.to_s
+        say(target,Time.now.to_s)
       when ma(warum)
-        say(say_why)
+        say(target,say_why)
       else
-      say(say_nick)
+      say(target,say_nick)
       end
     when /ruby/i
-      say(say_ruby)
+      say(target,say_ruby)
     when /chaostal/i
-      say("www.chaostal.de")
+      say(target,"www.chaostal.de")
     when /wo bin ich/i
-      say("hier: "+target)
+      say(target,"hier: "+target)
     when /guten morgen/i
-      say("guten morgen "+source)
+      say(target,"guten morgen "+source)
     end
   end
   # callback for all messages sent from IRC server
