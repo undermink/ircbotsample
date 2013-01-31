@@ -25,8 +25,9 @@ end
 
 client = EventMachine::IRC::Client.new do
   host 'irc.chaostal.de'
-  port '6667'
-  #ssl true
+  port '9999'
+  realname $nick
+  ssl true
   def say(what)
     sleep 2
     message($channel,what)
