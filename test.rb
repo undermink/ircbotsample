@@ -48,7 +48,7 @@ client = EventMachine::IRC::Client.new do
   on(:join) do |who,channel,names|  # called after joining a channel
     puts "on join"
     pp who,channel,names
-    topic($channel, "owned by a bot:)")
+    topic(channel, "owned by a bot:)")
 
     say_hi=['hallo ','hey ','hi ', 'der gute alte ','ah... hi ','willkommen '].sample
     if $known.member?(who) then
