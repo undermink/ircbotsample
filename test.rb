@@ -8,6 +8,7 @@ $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
 $known=['mettfabrik','nora','underm|nk','godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
+
 class Matcher
   def initialize(ar)
     @ar=ar
@@ -29,6 +30,7 @@ client = EventMachine::IRC::Client.new do
   port '9999'
   realname $nick
   ssl true
+  
   def say(target,what)
     sleep 2
     message(target,what)
@@ -53,9 +55,6 @@ client = EventMachine::IRC::Client.new do
     say_hi=['hallo ','hey ','hi ', 'der gute alte ','ah... hi ','willkommen '].sample
     if $known.member?(who) then
       send_data("mode "+ channel + " +o "+ who)
-      luser=send_data("luser" + channel)
-      pp luser
-      #pp "OP " + who
       say(channel, say_hi+who)
     else
       say(channel,"hi")
