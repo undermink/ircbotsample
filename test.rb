@@ -70,25 +70,25 @@ client = EventMachine::IRC::Client.new do
     puts "message: <#{source}> -> <#{target}>: #{message}"
     zeit=['uhrzeit', 'wie spaet', 'wieviel uhr']
     warum=['warum','wieso','weshalb']
-    say_why=['nun ja...', 'tja '+source, 'warum nicht?', source+' warum nicht?', 'einfach so '+source, 'das wuerdest du wohl gerne wissen '+source].sample
-    say_nick= ['hmm?','ja?','was?', source+'... was?', 'ja bitte '+source+' ?'].sample
-    say_ruby= ['ruby ist toll:)','ich bin auch in ruby geschrieben...','ich mag objekte:)','ruby? find ich gut:)'].sample
+    say_why=['nun ja...', 'tja '+ source + ' ...', 'warum nicht?', source + ' warum nicht?', 'einfach so ' + source, 'das wuerdest du wohl gerne wissen, ' + source, 'warum auch nicht ' + source + '?', 'gute frage ', 'das kann ich leider nicht beantworten ' + source].sample
+    say_nick= ['hmm?','ja?','was?', source +'... was?', 'ja bitte '+ source + '?', 'huch...', 'oehm...', 'inwiefern ' + source + '?'].sample
+    say_ruby= ['ruby ist toll:)','ich bin auch in ruby geschrieben...','ich mag objekte:)','ruby? find ich gut:)', 'OOP FTW', 'hab ich da ruby gehoert, ' + source '?', 'ruby ist doch super:)'].sample
     say_sup=['gut '+ source + ' danke:)', 'super:)', 'sehr gut... danke ' + source, 'bestens:) danke... dir denn auch ' + source + '?', 'wunderbar ' + source + '. danke der nachfrage:)', 'blendend ' + source + '... danke:)', 'hervorragend:)', 'fantastisch ' + source].sample
 
     def ma(ar)
       Matcher.new(ar)
     end
     @message = message.downcase
-    pp @message + ' # downcased'
+    #pp @message + ' # downcased'
     case @message
     when /#{$nick}/i
       case @message
       when /wie sp\xC3\xA4t/i
-        say(target,"Wir haben " + Time.now.to_s[11,5] + " Uhr und " + Time.now.to_s[17,2] + " Sekunden " + source)
+        say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when ma(zeit)
-        say(target,"Wir haben " + Time.now.to_s[11,5] + " Uhr und " + Time.now.to_s[17,2] + " Sekunden " + source)
+        say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when /datum/i
-        say(target, Time.now.to_s[0,11] + source)
+        say(target, Time.now.strftime("%A, %B the %d."))
       when ma(warum)
         say(target,say_why)
       when /wie geht/i && /dir/i
