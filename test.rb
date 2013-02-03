@@ -8,19 +8,18 @@ $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
 $known=['mettfabrik','nora','underm|nk','godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
-
 class Matcher
   def initialize(ar)
     @ar=ar
   end
 
   def ===(other)
-    @ar.each{|word| 
+    @ar.each{|word|
       if other=~/#{word}/
         puts "ok #{other} #{word}"
-        return true
+      return true
       end
-      }
+    }
     false
   end
 end
@@ -30,7 +29,6 @@ client = EventMachine::IRC::Client.new do
   port '9999'
   realname $nick
   ssl true
-  
   def say(target,what)
     sleep 2
     message(target,what)
@@ -52,7 +50,7 @@ client = EventMachine::IRC::Client.new do
     pp who,channel,names
     topic(channel, "owned by a bot:)")
 
-    say_hi=['hallo ','hey ','hi ', 'der gute alte ','ah... hi ','willkommen '].sample
+    say_hi=['hallo ','hey ','hi ', 'der gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag '].sample
     if $known.member?(who) then
       send_data("mode "+ channel + " +o "+ who)
       say(channel, say_hi+who)
@@ -70,22 +68,33 @@ client = EventMachine::IRC::Client.new do
 
   on(:message) do |source, target, message|  # called when being messaged
     puts "message: <#{source}> -> <#{target}>: #{message}"
-    zeit=[' uhrzeit', 'wie spaet', 'wieviel uhr']
-    warum=['warum','wieso','\?']
+    zeit=['uhrzeit', 'wie spaet', 'wieviel uhr']
+    warum=['warum','wieso','weshalb']
     say_why=['nun ja...', 'tja '+source, 'warum nicht?', source+' warum nicht?', 'einfach so '+source, 'das wuerdest du wohl gerne wissen '+source].sample
     say_nick= ['hmm?','ja?','was?', source+'... was?', 'ja bitte '+source+' ?'].sample
     say_ruby= ['ruby ist toll:)','ich bin auch in ruby geschrieben...','ich mag objekte:)','ruby? find ich gut:)'].sample
+    say_sup=['gut '+ source + ' danke:)', 'super:)', 'sehr gut... danke ' + source, 'bestens:) danke... dir denn auch ' + source + '?', 'wunderbar ' + source + '. danke der nachfrage:)', 'blendend ' + source + '... danke:)', 'hervorragend:)', 'fantastisch ' + source].sample
 
     def ma(ar)
       Matcher.new(ar)
     end
-    case message.downcase
+    @message = message.downcase
+    pp @message + ' # downcased'
+    case @message
     when /#{$nick}/i
-      case message.downcase
+      case @message
+      when /wie sp\xC3\xA4t/i
+        say(target,"Wir haben " + Time.now.to_s[11,5] + " Uhr und " + Time.now.to_s[17,2] + " Sekunden " + source)
       when ma(zeit)
-        say(target,Time.now.to_s)
+        say(target,"Wir haben " + Time.now.to_s[11,5] + " Uhr und " + Time.now.to_s[17,2] + " Sekunden " + source)
+      when /datum/i
+        say(target, Time.now.to_s[0,11] + source)
       when ma(warum)
         say(target,say_why)
+      when /wie geht/i && /dir/i
+        say(target,say_sup)
+      when /wie geht\'s/
+        say(target,say_sup)
       else
       say(target,say_nick)
       end
