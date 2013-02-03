@@ -48,8 +48,9 @@ client = EventMachine::IRC::Client.new do
   on(:join) do |who,channel,names|  # called after joining a channel
     puts "on join"
     pp who,channel,names
-    topic(channel, "owned by a bot:)")
-
+    if who == $nick
+      topic(channel, "owned by a bot:)")
+    end
     say_hi=['hallo ','hey ','hi ', 'der gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag '].sample
     if $known.member?(who) then
       send_data("mode "+ channel + " +o "+ who)
@@ -89,6 +90,8 @@ client = EventMachine::IRC::Client.new do
         say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when /datum/i
         say(target, Time.now.strftime("%A, %B the %d."))
+      when /tag/i && /heute/i
+        say(target, Time.now.strftime("%A..."))
       when ma(warum)
         say(target,say_why)
       when /wie geht/i && /dir/i
