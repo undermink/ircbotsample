@@ -7,7 +7,7 @@ require 'pp'
 $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
-$known=['mettfabrik','nora','underm|nk','godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
+$known=['thoto', 'solo', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
 class Matcher
   def initialize(ar)
     @ar=ar
@@ -24,14 +24,21 @@ class Matcher
   end
 end
 
+$talking=true
+
 client = EventMachine::IRC::Client.new do
-  host 'irc.chaostal.de'
-  port '9999'
+  host 'irc.freenode.net'
+  port '7000'
   realname $nick
   ssl true
-  def say(target,what)
-    sleep 2
-    message(target,what)
+  def say(target,what,sayImmediately=false)
+    if sayImmediately
+      message(target,what)
+    else
+      EM.add_timer(2) do
+        message(target,what) if $talking
+      end
+    end
   end
 
   on(:connect) do
@@ -81,7 +88,18 @@ client = EventMachine::IRC::Client.new do
     end
     @message = message.downcase
     #pp @message + ' # downcased'
+    if target == $nick 
+      target = source
+    end
     case @message
+    when /#{$nick}.*bitte.*([1-9][0-9]*).*(minute|sekunde|stunde).*ruhig/i
+      say(source,"ja, is gut",true)
+      $talking=false
+      time=$1.to_i*({"minuten"=>60,"sekunden"=>1,"stunden"=>3600}[$2])
+      say(source,"ich schlafe jetzt #{time} sekunden",true)
+      EM.add_timer(time) do
+        $talking=true
+    end
     when /#{$nick}/i
       case @message
       when /wie sp\xC3\xA4t/i
@@ -90,7 +108,7 @@ client = EventMachine::IRC::Client.new do
         say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when /datum/i
         say(target, Time.now.strftime("%A, %B the %d."))
-      when /tag/i && /heute/i
+      when /tag.*heute/i
         say(target, Time.now.strftime("%A..."))
       when ma(warum)
         say(target,say_why)
