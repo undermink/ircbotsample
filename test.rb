@@ -79,12 +79,14 @@ client = EventMachine::IRC::Client.new do
     zeit=['uhrzeit', 'wie spaet', 'wieviel uhr']
     warum=['warum','wieso','weshalb']
     nacht=['gute nacht','gn8','gute n8']
-    say_why=['nun ja...', 'tja '+ source + ' ...', 'warum nicht?', source + ' warum nicht?', 'einfach so ' + source, 'das wuerdest du wohl gerne wissen, ' + source, 'warum auch nicht ' + source + '?', 'gute frage ', 'das kann ich leider nicht beantworten ' + source].sample
+    hi=['hi','hallo','tag','tach','moin','guten morgen']
+    say_why=['nun ja...', 'tja '+ source + ' ...', 'warum nicht?', source + ' warum nicht?', 'einfach so ' + source, 'das wuerdest du wohl gerne wissen, ' + source, 'warum auch nicht ' + source + '?', 'gute frage ', 'das kann ich leider nicht beantworten ' + source,'nein','ach quatsch...','ich glaub dir kein wort', 'jetzt uebertreibst du aber...','*hust*','noe...'].sample
     say_nick= ['hmm?','ja?','was?', source +'... was?', 'ja bitte '+ source + '?', 'huch...', 'oehm...', 'inwiefern ' + source + '?'].sample
     say_ruby= ['ruby ist toll:)','ich bin auch in ruby geschrieben...','ich mag objekte:)','ruby? find ich gut:)', 'OOP FTW', 'hab ich da ruby gehoert, ' + source + '?', 'ruby ist doch super:)'].sample
     say_sup=['gut '+ source + ' danke:)', 'super:)', 'sehr gut... danke ' + source, 'bestens:) danke... dir denn auch ' + source + '?', 'wunderbar ' + source + '. danke der nachfrage:)', 'blendend ' + source + '... danke:)', 'hervorragend:)', 'fantastisch ' + source].sample
     say_nacht=['gute nacht ' + source,'nacht ' + source,'schlaf gut ' + source,'tschuss ' + source,'tschoe ' + source,source + ' bis dann...','auf bald ' + source, 'moege die macht mit dir sein ' + source, 'auf wiedersehen ' + source].sample
-    
+    say_hi=['hehe...', 'hi ' + source, source + '...', 'hallo ' +  source, 'und...? alles fit ' + source, 'tach ' + source, 'einen wunderschoenen guten morgen ' + source, 'fisch *kicher*', 'moin ' + source].sample
+
     def ma(ar)
       Matcher.new(ar)
     end
@@ -120,6 +122,14 @@ client = EventMachine::IRC::Client.new do
         say(target,say_sup)
       when /wie geht\'s/
         say(target,say_sup)
+      when ma(nacht)
+        if $known.member?(source) then
+          say(target,say_nacht)
+        else
+          say(target,'nacht...')
+        end
+      when ma(hi)
+        say(target,say_hi)
       else
       say(target,say_nick)
       end
