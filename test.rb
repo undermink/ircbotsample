@@ -78,10 +78,14 @@ client = EventMachine::IRC::Client.new do
     puts "message: <#{source}> -> <#{target}>: #{message}"
     zeit=['uhrzeit', 'wie spaet', 'wieviel uhr']
     warum=['warum','wieso','weshalb']
-    say_why=['nun ja...', 'tja '+ source + ' ...', 'warum nicht?', source + ' warum nicht?', 'einfach so ' + source, 'das wuerdest du wohl gerne wissen, ' + source, 'warum auch nicht ' + source + '?', 'gute frage ', 'das kann ich leider nicht beantworten ' + source].sample
+    nacht=['gute nacht','gn8','gute n8']
+    hi=['hi','hallo','tag','tach','moin','guten morgen']
+    say_why=['nun ja...', 'tja '+ source + ' ...', 'warum nicht?', source + ' warum nicht?', 'einfach so ' + source, 'das wuerdest du wohl gerne wissen, ' + source, 'warum auch nicht ' + source + '?', 'gute frage ', 'das kann ich leider nicht beantworten ' + source,'nein','ach quatsch...','ich glaub dir kein wort', 'jetzt uebertreibst du aber...','*hust*','noe...'].sample
     say_nick= ['hmm?','ja?','was?', source +'... was?', 'ja bitte '+ source + '?', 'huch...', 'oehm...', 'inwiefern ' + source + '?'].sample
     say_ruby= ['ruby ist toll:)','ich bin auch in ruby geschrieben...','ich mag objekte:)','ruby? find ich gut:)', 'OOP FTW', 'hab ich da ruby gehoert, ' + source + '?', 'ruby ist doch super:)'].sample
     say_sup=['gut '+ source + ' danke:)', 'super:)', 'sehr gut... danke ' + source, 'bestens:) danke... dir denn auch ' + source + '?', 'wunderbar ' + source + '. danke der nachfrage:)', 'blendend ' + source + '... danke:)', 'hervorragend:)', 'fantastisch ' + source].sample
+    say_nacht=['gute nacht ' + source,'nacht ' + source,'schlaf gut ' + source,'tschuss ' + source,'tschoe ' + source,source + ' bis dann...','auf bald ' + source, 'moege die macht mit dir sein ' + source, 'auf wiedersehen ' + source].sample
+    say_hi=['hehe...', 'hi ' + source, source + '...', 'hallo ' +  source, 'und...? alles fit ' + source, 'tach ' + source, 'einen wunderschoenen guten morgen ' + source, 'fisch *kicher*', 'moin ' + source].sample
 
     def ma(ar)
       Matcher.new(ar)
@@ -92,18 +96,18 @@ client = EventMachine::IRC::Client.new do
     target = source
     end
     case @message
-    
+
     when /#{$nick}/i
       case @message
-        when /.*bitte.*([1-9][0-9]*).*(minute|sekunde|stunde).*ruhig/i
-          say(source,"is ja schon gut...",true)
-          $talking=false
-          pp $1 +' '+$2+' schlafen...zzzzzZZZZZZ'
-         time=$1.to_i*({"minute"=>60,"sekunde"=>1,"stunde"=>3600}[$2])
-          say(source,"dann schlafe ich jetzt #{time} sekunden",true)
-          EM.add_timer(time) do
-            $talking=true
-          end
+      when /.*bitte.*([1-9][0-9]*).*(minute|sekunde|stunde).*ruhig/i
+        say(source,"is ja schon gut...",true)
+        $talking=false
+        pp $1 +' '+$2+' schlafen...zzzzzZZZZZZ'
+        time=$1.to_i*({"minute"=>60,"sekunde"=>1,"stunde"=>3600}[$2])
+        say(source,"dann schlafe ich jetzt #{time} sekunden",true)
+        EM.add_timer(time) do
+          $talking=true
+        end
       when /wie sp\xC3\xA4t/i
         say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when ma(zeit)
@@ -118,6 +122,14 @@ client = EventMachine::IRC::Client.new do
         say(target,say_sup)
       when /wie geht\'s/
         say(target,say_sup)
+      when ma(nacht)
+        if $known.member?(source) then
+          say(target,say_nacht)
+        else
+          say(target,'nacht...')
+        end
+      when ma(hi)
+        say(target,say_hi)
       else
       say(target,say_nick)
       end
@@ -126,9 +138,15 @@ client = EventMachine::IRC::Client.new do
     when /chaostal/i
       say(target,"www.chaostal.de")
     when /wo bin ich/i
-      say(target,"hier: "+target)
+      say(target,"hier: "+target+' '+source)
     when /guten morgen/i
       say(target,"guten morgen "+source)
+    when ma(nacht)
+      if $known.member?(source) then
+        say(target,say_nacht)
+      else
+        say(target,'nacht...')
+      end
     end
   end
   # callback for all messages sent from IRC server
