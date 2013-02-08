@@ -27,8 +27,8 @@ end
 $talking=true
 
 client = EventMachine::IRC::Client.new do
-  host 'irc.freenode.net'
-  port '7000'
+  host 'irc.chaostal.de'
+  port '9999'
   realname $nick
   ssl true
   def say(target,what,sayImmediately=false)
