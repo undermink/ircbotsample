@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-#
+
 require 'em-irc'
 require 'logger'
 require 'pp'
@@ -7,7 +7,7 @@ require 'pp'
 $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
-$known=['thoto', 'solo', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
+$known=['thoto', 'solo', 'Endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
 class Matcher
   def initialize(ar)
     @ar=ar
@@ -88,26 +88,28 @@ client = EventMachine::IRC::Client.new do
     end
     @message = message.downcase
     #pp @message + ' # downcased'
-    if target == $nick 
-      target = source
+    if target == $nick then
+    target = source
     end
     case @message
-    when /#{$nick}.*bitte.*([1-9][0-9]*).*(minute|sekunde|stunde).*ruhig/i
-      say(source,"ja, is gut",true)
-      $talking=false
-      time=$1.to_i*({"minuten"=>60,"sekunden"=>1,"stunden"=>3600}[$2])
-      say(source,"ich schlafe jetzt #{time} sekunden",true)
-      EM.add_timer(time) do
-        $talking=true
-    end
+    
     when /#{$nick}/i
       case @message
+        when /.*bitte.*([1-9][0-9]*).*(minute|sekunde|stunde).*ruhig/i
+          say(source,"is ja schon gut...",true)
+          $talking=false
+          pp $1 +' '+$2+' schlafen...zzzzzZZZZZZ'
+         time=$1.to_i*({"minute"=>60,"sekunde"=>1,"stunde"=>3600}[$2])
+          say(source,"dann schlafe ich jetzt #{time} sekunden",true)
+          EM.add_timer(time) do
+            $talking=true
+          end
       when /wie sp\xC3\xA4t/i
         say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when ma(zeit)
         say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when /datum/i
-        say(target, Time.now.strftime("%A, %B the %d."))
+        say(target, Time.now.strftime("%A, %B the %d. 20%y"))
       when /tag.*heute/i
         say(target, Time.now.strftime("%A..."))
       when ma(warum)
