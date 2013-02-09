@@ -7,7 +7,7 @@ require 'pp'
 $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
-$known=['thoto', 'solo', 'Endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
+$known=['thoto', 'solo', 'Endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_', 'Godrin', 'Godrin_', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
 class Matcher
   def initialize(ar)
     @ar=ar
