@@ -143,7 +143,7 @@ client = EventMachine::IRC::Client.new do
       say(target, "Du bist " + source)
     when /leck mich/i
       say(target,source + "... benimm Dich!")
-    when /*ruelps*/i
+    when /\*ruelps\*/i
       say(target, "schulz...")
     when /hoerst du das auch/i
       say(target, "ich hoer nichts " + source)
