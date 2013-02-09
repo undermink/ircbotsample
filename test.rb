@@ -139,6 +139,16 @@ client = EventMachine::IRC::Client.new do
       say(target,"www.chaostal.de")
     when /wo bin ich/i
       say(target,"hier: "+target+' '+source)
+    when /wer bin ich/i
+      say(target, "Du bist " + source)
+    when /leck mich/i
+      say(target,source + "... benimm Dich!")
+    when /*ruelps*/i
+      say(target, "schulz...")
+    when /hoerst du das auch/i
+      say(target, "ich hoer nichts " + source)
+    when /ich glaub dein gen ist defekt/i
+      say(target, "ich hab keine gene " + source)
     when /guten morgen/i
       say(target,"guten morgen "+source)
     when ma(nacht)
