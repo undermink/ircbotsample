@@ -86,7 +86,9 @@ client = EventMachine::IRC::Client.new do
     say_sup=['gut '+ source + ' danke:)', 'super:)', 'sehr gut... danke ' + source, 'bestens:) danke... dir denn auch ' + source + '?', 'wunderbar ' + source + '. danke der nachfrage:)', 'blendend ' + source + '... danke:)', 'hervorragend:)', 'fantastisch ' + source].sample
     say_nacht=['gute nacht ' + source,'nacht ' + source,'schlaf gut ' + source,'tschuss ' + source,'tschoe ' + source,source + ' bis dann...','auf bald ' + source, 'moege die macht mit dir sein ' + source, 'auf wiedersehen ' + source].sample
     say_hi=['hehe...', 'hi ' + source, source + '...', 'hallo ' +  source, 'und...? alles fit ' + source, 'tach ' + source, 'einen wunderschoenen guten morgen ' + source, 'fisch *kicher*', 'moin ' + source].sample
-
+    say_clever=['Die Schwaermerei fuer die Natur kommt von der Unbewohnbarkeit der Staedte.','Der Faschismus sollte Korporatismus heissen, weil er die perfekte Verschmelzung der Macht von Regierung und Konzernen ist.','Wenn die Leute das gegenwaertige Bank- und Geldsystem verstuenden, wuerde es vermutlich eine Revolution noch vor morgen frueh geben.','Das Geld ist fuer den Tausch entstanden, der Zins aber weist ihm die Bestimmung an, sich durch sich selbst zu vermehren. Daher widerstreitet auch diese Erwerbsweise unter allen am weitesten dem Naturrecht.','Keiner weiss so viel wie wir alle zusammen.','Together the ants conquer the elephant.','Wo die Zivilcourage keine Heimat hat, reicht die Freiheit nicht weit.','Ich habe bisweilen den Eindruck, dass sich die meisten Politiker immer noch nicht darueber im Klaren sind, wie sehr sie bereits heute unter der Kontrolle der Finanzmaerkte stehen und sogar von diesen beherrscht werden.','Gebt mir die Kontrolle ueber das Geldsystem und mir ist es egal, wer die Gesetze schreibt.','Aus 100 Dollar 110 Dollar zu machen ist Arbeit. Aus 100 Millionen Dollar 110 Millionen zu machen, ist unvermeidlich.','Die Schaffung eines Geldes, das sich nicht horten laesst, wuerde zur Bildung von Eigentum in wesentlicherer Form fuehren.','Demokratie ist nichts anderes als das Nieder- knueppeln des Volkes durch das Volk fuer das Volk...'].sample
+    say_noprob=['kein thema '+source,'gerne '+source,'bitte '+source,'kein problem '+source,'null problemo...','ist doch selbstverstaendlich:)','nichts zu danken '+source,'selbstverstaendlich '+source].sample
+    
     def ma(ar)
       Matcher.new(ar)
     end
@@ -116,6 +118,8 @@ client = EventMachine::IRC::Client.new do
         say(target, Time.now.strftime("%A, %B the %d. 20%y"))
       when /tag.*heute/i
         say(target, Time.now.strftime("%A..."))
+      when /sag.*was.*schlaues/i
+        say(target,say_clever)
       when ma(warum)
         say(target,say_why)
       when /wie geht/i && /dir/i
@@ -130,6 +134,8 @@ client = EventMachine::IRC::Client.new do
         end
       when ma(hi)
         say(target,say_hi)
+      when /danke/i
+        say(target,say_noprob)
       else
       say(target,say_nick)
       end
@@ -138,7 +144,7 @@ client = EventMachine::IRC::Client.new do
     when /chaostal/i
       say(target,"www.chaostal.de")
     when /wo bin ich/i
-      say(target,"hier: "+target+' '+source)
+      say(target,"hier: "+target+', '+source)
     when /wer bin ich/i
       say(target, "Du bist " + source)
     when /leck mich/i
