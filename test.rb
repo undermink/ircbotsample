@@ -97,8 +97,8 @@ client = EventMachine::IRC::Client.new do
       'Gebt mir die Kontrolle ueber das Geldsystem und mir ist es egal, wer die Gesetze schreibt.',
       'Aus 100 Dollar 110 Dollar zu machen ist Arbeit. Aus 100 Millionen Dollar 110 Millionen zu machen, ist unvermeidlich.',
       'Die Schaffung eines Geldes, das sich nicht horten laesst, wuerde zur Bildung von Eigentum in wesentlicherer Form fuehren.',
-      'Demokratie ist nichts anderes als das Nieder- knueppeln des Volkes durch das Volk fuer das Volk...'].sample
-    say_noprob=['kein thema '+source,'gerne '+source,'bitte '+source,'kein problem '+source,'null problemo...','ist doch selbstverstaendlich:)','nichts zu danken '+source,'selbstverstaendlich '+source,'*schwitz*','...ich muss weg'].sample
+      'Demokratie ist nichts anderes als das Nieder- knueppeln des Volkes durch das Volk fuer das Volk...','*hust*','*schwitz*','...ich muss weg','nein'].sample
+    say_noprob=['kein thema '+source,'gerne '+source,'bitte '+source,'kein problem '+source,'null problemo...','ist doch selbstverstaendlich:)','nichts zu danken '+source,'selbstverstaendlich '+source].sample
 
     def ma(ar)
       Matcher.new(ar)
