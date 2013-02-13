@@ -110,7 +110,7 @@ client = EventMachine::IRC::Client.new do
     end
     case @message
 
-    when /#{$nick}/i
+    when /#{$nick}/i  # nur antworten wenn der nick fällt
       case @message
       when /.*bitte.*([1-9][0-9]*).*(minute|sekunde|stunde).*ruhig/i
         say(source,"is ja schon gut...",true)
@@ -142,15 +142,15 @@ client = EventMachine::IRC::Client.new do
           say(target,say_nacht)
         else
           say(target,'nacht...')
-        end
+        end 
       when ma(hi)
         say(target,say_hi)
       when /danke/i
         say(target,say_noprob)
       else
       say(target,say_nick)
-      end
-    when /ruby/i
+      end # ende der antworten wenn der nick fällt
+    when /ruby/i # antworten auch ohne den nick
       say(target,say_ruby)
     when /chaostal/i
       say(target,"www.chaostal.de")
@@ -174,7 +174,7 @@ client = EventMachine::IRC::Client.new do
       else
         say(target,'nacht...')
       end
-    end
+    end # ende der antworten ohne nick
   end
   # callback for all messages sent from IRC server
   on(:parsed) do |hash|
