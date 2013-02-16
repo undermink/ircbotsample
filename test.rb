@@ -8,19 +8,19 @@ $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
 $known=['thoto', 'solo', 'Endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_', 'Godrin', 'Godrin_', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
-class Matcher
+class Matcher # klasse zum vergleichen
   def initialize(ar)
     @ar=ar
   end
 
   def ===(other)
     @ar.each{|word|
-      if other=~/#{word}/
+      if other=~/#{word}/ # wenn die wörter übereinstimmen
         puts "ok #{other} #{word}"
       return true
       end
     }
-    false
+    false # wenn sie nicht übereinstimmen
   end
 end
 
@@ -31,12 +31,12 @@ client = EventMachine::IRC::Client.new do
   port '9999'
   realname $nick
   ssl true
-  def say(target,what,sayImmediately=false)
-    if sayImmediately
+  def say(target,what,sayImmediately=false) # sprechen
+    if sayImmediately # sprechen auch wenn er still sein soll
       message(target,what)
     else
-      EM.add_timer(2) do
-        message(target,what) if $talking
+      EM.add_timer(2) do # 2 sekunden warten bevor er antwortet
+        message(target,what) if $talking # und nur wenn talking = true ist
       end
     end
   end
@@ -45,7 +45,7 @@ client = EventMachine::IRC::Client.new do
     nick($nick)
   end
 
-  on(:nick) do
+  on(:nick) do # die beiden channels betreten wenn der nick vom server akzeptiert wird
     join($channel)
     join($channel2)
     puts "on nick"
@@ -55,15 +55,15 @@ client = EventMachine::IRC::Client.new do
   on(:join) do |who,channel,names|  # called after joining a channel
     puts "on join"
     pp who,channel,names
-    if who == $nick
+    if who == $nick # nur die topic setzen wenn ER den raum betritt
       topic(channel, "owned by a bot:)")
     end
     say_hi=['hallo ','hey ','hi ', 'der gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag '].sample
-    if $known.member?(who) then
+    if $known.member?(who) then # wenn er dich kennt
       send_data("mode "+ channel + " +o "+ who)
       say(channel, say_hi+who)
     else
-      say(channel,"hi")
+      say(channel,"hi") # wenn nicht:)
     end
   #case who
   #when / #{$known}/i
@@ -97,10 +97,16 @@ client = EventMachine::IRC::Client.new do
       'Gebt mir die Kontrolle ueber das Geldsystem und mir ist es egal, wer die Gesetze schreibt.',
       'Aus 100 Dollar 110 Dollar zu machen ist Arbeit. Aus 100 Millionen Dollar 110 Millionen zu machen, ist unvermeidlich.',
       'Die Schaffung eines Geldes, das sich nicht horten laesst, wuerde zur Bildung von Eigentum in wesentlicherer Form fuehren.',
-      'Demokratie ist nichts anderes als das Nieder- knueppeln des Volkes durch das Volk fuer das Volk...','*hust*','*schwitz*','...ich muss weg','nein'].sample
+      'Demokratie ist nichts anderes als das Nieder- knueppeln des Volkes durch das Volk fuer das Volk...','*hust*','*schwitz*','...ich muss weg','nein',
+      'Der Unternehmer ist ein Arbeiter, der im Unternehmergewinn seinen Arbeitslohn verdient, der ihm vom Gewinn bleibt, nachdem ihm die Banken den Zins abgenommen haben ... Insofern bildet der Unternehmergewinn keinen Gegensatz zur Lohnarbeit, sondern nur zum Zins.',
+      'Eine wirklich gute Idee erkennt man daran, dass ihre Verwirklichung von vornherein ausgeschlossen erschien.',
+      'Niemand ist so hoffnungslos versklavt, wie diejenigen, die faelschlicherweise glauben frei zu sein.',
+      'Freedom ist the right to tell the people what they do not want to hear...',
+      'Ein Volk, das seine Freiheit fuer Sicherheit opfert, wird am Ende beides verlieren.',
+      'Wer Sicherheit der Freiheit vorzieht, ist zu Recht ein Sklave.'].sample
     say_noprob=['kein thema '+source,'gerne '+source,'bitte '+source,'kein problem '+source,'null problemo...','ist doch selbstverstaendlich:)','nichts zu danken '+source,'selbstverstaendlich '+source].sample
 
-    def ma(ar)
+    def ma(ar) # funktion zum vergleichen von wörtern mit der klasse von oben
       Matcher.new(ar)
     end
     @message = message.downcase
@@ -110,7 +116,7 @@ client = EventMachine::IRC::Client.new do
     end
     case @message
 
-    when /#{$nick}/i
+    when /#{$nick}/i  # nur antworten wenn der nick fällt
       case @message
       when /.*bitte.*([1-9][0-9]*).*(minute|sekunde|stunde).*ruhig/i
         say(source,"is ja schon gut...",true)
@@ -142,15 +148,15 @@ client = EventMachine::IRC::Client.new do
           say(target,say_nacht)
         else
           say(target,'nacht...')
-        end
+        end 
       when ma(hi)
         say(target,say_hi)
       when /danke/i
         say(target,say_noprob)
       else
       say(target,say_nick)
-      end
-    when /ruby/i
+      end # ende der antworten wenn der nick fällt
+    when /ruby/i # antworten auch ohne den nick
       say(target,say_ruby)
     when /chaostal/i
       say(target,"www.chaostal.de")
@@ -174,7 +180,7 @@ client = EventMachine::IRC::Client.new do
       else
         say(target,'nacht...')
       end
-    end
+    end # ende der antworten ohne nick
   end
   # callback for all messages sent from IRC server
   on(:parsed) do |hash|
