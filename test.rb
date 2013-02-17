@@ -98,13 +98,26 @@ client = EventMachine::IRC::Client.new do
       'Gebt mir die Kontrolle ueber das Geldsystem und mir ist es egal, wer die Gesetze schreibt.',
       'Aus 100 Dollar 110 Dollar zu machen ist Arbeit. Aus 100 Millionen Dollar 110 Millionen zu machen, ist unvermeidlich.',
       'Die Schaffung eines Geldes, das sich nicht horten laesst, wuerde zur Bildung von Eigentum in wesentlicherer Form fuehren.',
-      'Demokratie ist nichts anderes als das Nieder- knueppeln des Volkes durch das Volk fuer das Volk...','*hust*','*schwitz*','...ich muss weg','nein',
+      'Demokratie ist nichts anderes als das Niederknueppeln des Volkes durch das Volk fuer das Volk...','*hust*','*schwitz*','...ich muss weg','nein',
       'Der Unternehmer ist ein Arbeiter, der im Unternehmergewinn seinen Arbeitslohn verdient, der ihm vom Gewinn bleibt, nachdem ihm die Banken den Zins abgenommen haben ... Insofern bildet der Unternehmergewinn keinen Gegensatz zur Lohnarbeit, sondern nur zum Zins.',
       'Eine wirklich gute Idee erkennt man daran, dass ihre Verwirklichung von vornherein ausgeschlossen erschien.',
       'Niemand ist so hoffnungslos versklavt, wie diejenigen, die faelschlicherweise glauben frei zu sein.',
       'Freedom ist the right to tell the people what they do not want to hear...',
       'Ein Volk, das seine Freiheit fuer Sicherheit opfert, wird am Ende beides verlieren.',
-      'Wer Sicherheit der Freiheit vorzieht, ist zu Recht ein Sklave.'].sample
+      'Wer Sicherheit der Freiheit vorzieht, ist zu Recht ein Sklave.',
+      'Es ist wichtiger, eine Stunde im Monat ueber Geld nachzudenken, als 30 Tage dafuer zu arbeiten.',
+      'Verschuettet unter einem Berg von Gesetzen und Verboten, festgezurrt in unsichtbaren wirtschaftlichen Abhaengigkeiten, in einem Arbeitsleben, das in weiten Teilen der Welt das eines Arbeitstiers ist, fast erstickend in einem Sumpf von billigem Tand und Lastern, so lebt heute ein Grossteil Mensch dieser Erde.',
+      'Es gibt keinen Weg, den finalen Kollaps eines Booms durch Kreditexpansion zu vermeiden. Die Frage ist nur ob die Krise frueher durch freiwillige Aufgabe der Kreditexpansion kommen soll, oder spaeter zusammen mit einer finalen und totalen Katastrophe des Waehrungssystems kommen soll...',
+      'Die Welt hat genug fuer jedermanns Beduerfnisse, aber nicht fuer jedermanns Gier.',
+      'Wer in der Demokratie die Wahrheit sagt, wird von der Masse getoetet.',
+      'In der Politik geht es nicht darum, Recht zu haben, sondern Recht zu behalten.',
+      'In der Politik ist es wie in der Mathematik: alles, was nicht ganz richtig ist, ist falsch.',
+      'Ich bin nicht sicher, mit welchen Waffen der dritte Weltkrieg ausgetragen wird, aber im vierten Weltkrieg werden sie mit Stoecken und Steinen kaempfen.',
+      'Moderne Kapitalisten sind freundliche Ausbeuter, moderne Sozialisten unfreundliche Austeiler.',
+      'Der Mensch, der gar nichts liest, ist besser informiert als derjenige, der nur Zeitung liest.',
+      'Um sicher Recht zu tun, braucht man sehr wenig vom Recht zu wissen. Allein um sicher Unrecht zu tun, muss man die Rechte studiert haben.',
+      'Wo der Buerger keine Stimme hat, haben die Waende Ohren.',
+      'Ich stehe Statistiken etwas skeptisch gegenueber. Denn laut Statistik haben ein Millionaer und ein armer Kerl jeder eine halbe Million.'].sample
     say_noprob=['kein thema '+source,'gerne '+source,'bitte '+source,'kein problem '+source,'null problemo...','ist doch selbstverstaendlich:)','nichts zu danken '+source,'selbstverstaendlich '+source].sample
 
     def ma(ar) # funktion zum vergleichen von wörtern mit der klasse von oben
