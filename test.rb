@@ -154,7 +154,7 @@ client = EventMachine::IRC::Client.new do
         say(target,say_hi)
       when /danke/i
         say(target,say_noprob)
-      when /mach.*mal/i
+      when /mach.*(mal|schon)|/i
         say(target,say_ok)
       else
       say(target,say_nick)
