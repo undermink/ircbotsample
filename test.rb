@@ -80,6 +80,7 @@ client = EventMachine::IRC::Client.new do
     warum=['warum','wieso','weshalb']
     nacht=['gute nacht','gn8','gute n8']
     hi=['hi','hallo','tag','tach','moin','guten morgen']
+    say_ok=['na gut...','ok','hmm... soll ich?', source + ' echt jetzt?','ok ' + source, 'nein', 'mach doch selber ' + source,'kein bock...','warum sollte ich ' + source + '?','dafuer gibt es keinen anlass ' + source,'jaja...ok','wenn du meinst ' + source].sample
     say_why=['nun ja...', 'tja '+ source + ' ...', 'warum nicht?', source + ' warum nicht?', 'einfach so ' + source, 'das wuerdest du wohl gerne wissen, ' + source, 'warum auch nicht ' + source + '?', 'gute frage ', 'das kann ich leider nicht beantworten ' + source,'nein','ach quatsch...','ich glaub dir kein wort', 'jetzt uebertreibst du aber...','*hust*','noe...'].sample
     say_nick= ['hmm?','ja?','was?', source +'... was?', 'ja bitte '+ source + '?', 'huch...', 'oehm...', 'inwiefern ' + source + '?','*hust*','*zuck*','hae?'].sample
     say_ruby= ['ruby ist toll:)','ich bin auch in ruby geschrieben...','ich mag objekte:)','ruby? find ich gut:)', 'OOP FTW', 'hab ich da ruby gehoert, ' + source + '?', 'ruby ist doch super:)'].sample
@@ -153,6 +154,8 @@ client = EventMachine::IRC::Client.new do
         say(target,say_hi)
       when /danke/i
         say(target,say_noprob)
+      when /mach.*(mal|schon)|/i
+        say(target,say_ok)
       else
       say(target,say_nick)
       end # ende der antworten wenn der nick fällt
