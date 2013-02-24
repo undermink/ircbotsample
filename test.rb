@@ -148,12 +148,9 @@ client = EventMachine::IRC::Client.new do
         say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when /datum/i
         datum=kal
-        say(target, datum[0])
-        say(target, datum[1])
-        say(target, datum[2])
-        say(target, datum[3])
-        say(target, datum[4])
-        say(target, datum[5])
+        0.upto(datum.length) { |i|
+        say(target, datum[i])
+        }
         #say(target, Time.now.strftime("%A, %B the %d. 20%y"))
       when /tag.*heute/i
         say(target, Time.now.strftime("%A..."))
