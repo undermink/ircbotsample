@@ -4,6 +4,8 @@ require 'em-irc'
 require 'logger'
 require 'pp'
 require './kalender.rb'
+require './email.rb'
+require 'mail'
 
 $channel=ARGV[1]
 $channel2=ARGV[2]
@@ -28,8 +30,8 @@ end
 $talking=true
 
 client = EventMachine::IRC::Client.new do
-  host 'irc.freenode.net'
-  port '7000'
+  host 'irc.chaostal.de'
+  port '9999'
   realname $nick
   ssl true
   def say(target,what,sayImmediately=false) # sprechen
@@ -59,7 +61,7 @@ client = EventMachine::IRC::Client.new do
     if who == $nick # nur die topic setzen wenn ER den raum betritt
       topic(channel, "owned by a bot:)")
     end
-    say_hi=['hallo ','hey ','hi ', 'der gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag '].sample
+    say_hi=['hallo ','hey ','hi ', 'et gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag '].sample
     if $known.member?(who) then # wenn er dich kennt
       send_data("mode "+ channel + " +o "+ who)
       say(channel, say_hi+who)
@@ -83,7 +85,7 @@ client = EventMachine::IRC::Client.new do
     hi=['hi','hallo','tag','tach','moin','guten morgen']
     say_ok=['na gut...','ok','hmm... soll ich?', source + ' echt jetzt?','ok ' + source, 'nein', 'mach doch selber ' + source,'kein bock...','warum sollte ich ' + source + '?','dafuer gibt es keinen anlass ' + source,'jaja...ok','wenn du meinst ' + source].sample
     say_why=['nun ja...', 'tja '+ source + ' ...', 'warum nicht?', source + ' warum nicht?', 'einfach so ' + source, 'das wuerdest du wohl gerne wissen, ' + source, 'warum auch nicht ' + source + '?', 'gute frage ', 'das kann ich leider nicht beantworten ' + source,'nein','ach quatsch...','ich glaub dir kein wort', 'jetzt uebertreibst du aber...','*hust*','noe...'].sample
-    say_nick= ['hmm?','ja?','was?', source +'... was?', 'ja bitte '+ source + '?', 'huch...', 'oehm...', 'inwiefern ' + source + '?','*hust*','*zuck*','hae?'].sample
+    say_nick= ['hmm?','ja?','was?', source +'... was?', 'ja bitte '+ source + '?', 'huch...', 'oehm...', 'inwiefern ' + source + '?','*hust*','*zuck*','hae?','...',':)','oeh...','*zitter*','*zusammenzuck*'].sample
     say_ruby= ['ruby ist toll:)','ich bin auch in ruby geschrieben...','ich mag objekte:)','ruby? find ich gut:)', 'OOP FTW', 'hab ich da ruby gehoert, ' + source + '?', 'ruby ist doch super:)'].sample
     say_sup=['gut '+ source + ' danke:)', 'super:)', 'sehr gut... danke ' + source, 'bestens:) danke... dir denn auch ' + source + '?', 'wunderbar ' + source + '. danke der nachfrage:)', 'blendend ' + source + '... danke:)', 'hervorragend:)', 'fantastisch ' + source].sample
     say_nacht=['gute nacht ' + source,'nacht ' + source,'schlaf gut ' + source,'tschuss ' + source,'tschoe ' + source,source + ' bis dann...','auf bald ' + source, 'moege die macht mit dir sein ' + source, 'auf wiedersehen ' + source].sample
@@ -142,6 +144,12 @@ client = EventMachine::IRC::Client.new do
         EM.add_timer(time) do
           $talking=true
         end
+      when /sag.*marc.*bescheid/i
+        tellundermink(source)
+      when /sag.*nora.*bescheid/i
+        tellnora(source)
+      when /sag.*simon.*bescheid/i
+        tellmettfabrik(source)
       when /wie sp\xC3\xA4t/i
         say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when ma(zeit)

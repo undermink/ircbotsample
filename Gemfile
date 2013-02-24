@@ -1,2 +1,4 @@
-source :rubygems
+source 'https://www.rubygems.org'
 gem 'em-irc'
+gem 'mail'
+gem 'pony'
