@@ -3,6 +3,7 @@
 require 'em-irc'
 require 'logger'
 require 'pp'
+require './kalender.rb'
 
 $channel=ARGV[1]
 $channel2=ARGV[2]
@@ -146,7 +147,14 @@ client = EventMachine::IRC::Client.new do
       when ma(zeit)
         say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when /datum/i
-        say(target, Time.now.strftime("%A, %B the %d. 20%y"))
+        datum=kal
+        say(target, datum[0])
+        say(target, datum[1])
+        say(target, datum[2])
+        say(target, datum[3])
+        say(target, datum[4])
+        say(target, datum[5])
+        #say(target, Time.now.strftime("%A, %B the %d. 20%y"))
       when /tag.*heute/i
         say(target, Time.now.strftime("%A..."))
       when /sag.*was.*schlaues/i
