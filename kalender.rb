@@ -24,9 +24,10 @@ wt = erster.wday
 # Sonntag => 7 (europ. Woche)
 wt = 7 if wt == 0
 puts
+answer = "--------#{jetzt.strftime("%B")}--------\n"
 puts
 puts " MO  DI  MI  DO  FR  SA  SO"
-answer = " MO  DI  MI  DO  FR  SA  SO\n"
+answer += " MO  DI  MI  DO  FR  SA  SO\n"
 # Leerzeichen von Montag bis Wochentag des Ersten
 leer = (wt - 1) * 4
 print " " * leer
