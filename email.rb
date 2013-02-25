@@ -8,9 +8,10 @@ def tellundermink(who)
     to      'undermink@chaostal.de'
     subject 'IRC'
     body    'Hi undermink
-    Hier ist powerbot...
-    Du sollst bitte mal in den irc kommen.
-    Soll ich Dir von '+who+' sagen...'
+
+Hier ist powerbot...
+Du sollst bitte mal in den irc kommen.
+Soll ich Dir von '+who+' sagen...'
   end
   mail.delivery_method :sendmail
   mail.deliver
@@ -24,9 +25,10 @@ def tellnora(who)
     to      'nora@sunnata.de'
     subject 'IRC'
     body    'Hi Nora
-    Hier ist powerbot...
-    Du sollst bitte mal ins irc kommen.
-    Soll ich Dir von '+who+' sagen.'
+
+Hier ist powerbot...
+Du sollst bitte mal ins irc kommen.
+Soll ich Dir von '+who+' sagen.'
   end
   mail.delivery_method :sendmail
   mail.deliver
@@ -40,9 +42,10 @@ def tellmettfabrik(who)
     to      'mettfabrik@sunnata.de'
     subject 'IRC'
     body    'Hi Simon
-    Hier ist powerbot...
-    Du sollst bitte mal ins irc kommen.
-    Soll ich Dir von '+who+' sagen.'
+
+Hier ist powerbot...
+Du sollst bitte mal ins irc kommen.
+Soll ich Dir von '+who+' sagen.'
   end
   mail.delivery_method :sendmail
   mail.deliver
