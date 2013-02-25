@@ -5,7 +5,6 @@ require 'logger'
 require 'pp'
 require './kalender.rb'
 require './email.rb'
-require 'mail'
 
 $channel=ARGV[1]
 $channel2=ARGV[2]
@@ -145,14 +144,19 @@ client = EventMachine::IRC::Client.new do
           $talking=true
         end
       when /sag.*marc.*bescheid/i
-        tellundermink(source)
+        tellundermink(source,target)
         say(target,'schon passiert:)')
       when /sag.*nora.*bescheid/i
-        tellnora(source)
+        tellnora(source,target)
         say(target,'schon passiert:)')
       when /sag.*simon.*bescheid/i
-        tellmettfabrik(source)
+        tellmettfabrik(source,target)
         say(target,'schon passiert:)')
+      when /sag.*(david|godrin).*bescheid/i
+        tellgodrin(source,target)
+        say(target,'schon passiert:)')
+      when /wie.*deine.*email/i
+        say(target, 'powerbot@sunnata.de warum fragst du '+source+'?')
       when /wie sp\xC3\xA4t/i
         say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when ma(zeit)

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'mail'
 
-def tellundermink(who)
+def tellundermink(who,where)
   pp 'sending message to undermink'
   mail = Mail.new do
     from    'powerbot@sunnata.de'
@@ -11,6 +11,7 @@ def tellundermink(who)
 
 Hier ist powerbot...
 Du sollst bitte mal in den irc kommen.
+In den Raum '+where+'
 Soll ich Dir von '+who+' sagen...'
   end
   mail.delivery_method :sendmail
@@ -18,7 +19,7 @@ Soll ich Dir von '+who+' sagen...'
   pp '...done'
 end
 
-def tellnora(who)
+def tellnora(who,where)
   pp 'sending message to nora'
   mail = Mail.new do
     from    'powerbot@sunnata.de'
@@ -28,6 +29,7 @@ def tellnora(who)
 
 Hier ist powerbot...
 Du sollst bitte mal ins irc kommen.
+In den Raum '+where+'
 Soll ich Dir von '+who+' sagen.'
   end
   mail.delivery_method :sendmail
@@ -35,7 +37,7 @@ Soll ich Dir von '+who+' sagen.'
   pp '...done'
 end
 
-def tellmettfabrik(who)
+def tellmettfabrik(who,where)
   pp 'sending message to mettfabrik'
   mail = Mail.new do
     from    'powerbot@sunnata.de'
@@ -45,6 +47,25 @@ def tellmettfabrik(who)
 
 Hier ist powerbot...
 Du sollst bitte mal ins irc kommen.
+In den Raum '+where+'
+Soll ich Dir von '+who+' sagen.'
+  end
+  mail.delivery_method :sendmail
+  mail.deliver
+  pp '...done'
+end
+
+def tellgodrin(who,where)
+  pp 'sending message to mettfabrik'
+  mail = Mail.new do
+    from    'powerbot@sunnata.de'
+    to      'david.kamphausen76@googlemail.com'
+    subject 'IRC'
+    body    'Hi David
+
+Hier ist powerbot...
+Du sollst bitte mal ins irc kommen.
+In den Raum '+where+'
 Soll ich Dir von '+who+' sagen.'
   end
   mail.delivery_method :sendmail
