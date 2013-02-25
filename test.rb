@@ -146,10 +146,13 @@ client = EventMachine::IRC::Client.new do
         end
       when /sag.*marc.*bescheid/i
         tellundermink(source)
+        say(target,'schon passiert:)')
       when /sag.*nora.*bescheid/i
         tellnora(source)
+        say(target,'schon passiert:)')
       when /sag.*simon.*bescheid/i
         tellmettfabrik(source)
+        say(target,'schon passiert:)')
       when /wie sp\xC3\xA4t/i
         say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when ma(zeit)
