@@ -143,17 +143,8 @@ client = EventMachine::IRC::Client.new do
         EM.add_timer(time) do
           $talking=true
         end
-      when /sag.*marc.*bescheid/i
-        tellundermink(source,target)
-        say(target,'schon passiert:)')
-      when /sag.*nora.*bescheid/i
-        tellnora(source,target)
-        say(target,'schon passiert:)')
-      when /sag.*simon.*bescheid/i
-        tellmettfabrik(source,target)
-        say(target,'schon passiert:)')
-      when /sag.*(david|godrin).*bescheid/i
-        tellgodrin(source,target)
+      when /sag.*(marc|nora|simon|david).*bescheid/i
+        tellsomebody(source,target,$1)
         say(target,'schon passiert:)')
       when /wie.*deine.*email/i
         say(target, 'powerbot@sunnata.de warum fragst du '+source+'?')
