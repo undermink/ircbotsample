@@ -9,7 +9,7 @@ require './email.rb'
 $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
-$known=['thoto', 'solo', 'Endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_', 'Godrin', 'Godrin_', 'undermink', 'thoto', 'balle', 'bastard', 'maniactwister', 'endres']
+$known=['thoto', 'solo', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard']
 class Matcher # klasse zum vergleichen
   def initialize(ar)
     @ar=ar
@@ -61,7 +61,7 @@ client = EventMachine::IRC::Client.new do
       topic(channel, "owned by a bot:)")
     end
     say_hi=['hallo ','hey ','hi ', 'et gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag '].sample
-    if $known.member?(who) then # wenn er dich kennt
+    if $known.member?(who.downcase) then # wenn er dich kennt
       send_data("mode "+ channel + " +o "+ who)
       say(channel, say_hi+who)
     else
@@ -144,8 +144,12 @@ client = EventMachine::IRC::Client.new do
           $talking=true
         end
       when /sag.*(marc|nora|simon|david).*bescheid/i
-        tellsomebody(source,target,$1)
-        say(target,'schon passiert:)')
+        if $known.member?(source.downcase)
+          tellsomebody(source,target,$1)
+          say(target,'schon passiert:)')
+        else
+          say(target,'hmm...nein:)')
+        end
       when /wie.*deine.*email/i
         say(target, 'powerbot@sunnata.de warum fragst du '+source+'?')
       when /wie sp\xC3\xA4t/i
