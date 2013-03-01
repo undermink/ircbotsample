@@ -62,7 +62,7 @@ client = EventMachine::IRC::Client.new do
     if channel=="#snow"
       snow=snowman
       0.upto(snow.length) { |i|
-        say(channel, snow[i])
+        message(channel, snow[i])
         }
     end
     if who == $nick # nur die topic setzen wenn ER den raum betritt
