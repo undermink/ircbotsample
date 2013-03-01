@@ -43,7 +43,7 @@ answer += " " * leer
   if tag == d
     printf "[%2d]", tag
     if tag.to_s.length < 2
-      t = '[] '+tag.to_s+']'
+      t = '[ '+tag.to_s+']'
     else
       t='['+tag.to_s+']'
     end
