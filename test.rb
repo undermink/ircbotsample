@@ -10,7 +10,7 @@ require './snowman.rb'
 $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
-$known=['thoto', 'solo', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard']
+$known=['thoto_', 'solo', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard']
 class Matcher # klasse zum vergleichen
   def initialize(ar)
     @ar=ar
@@ -35,6 +35,10 @@ client = EventMachine::IRC::Client.new do
   realname $nick
   ssl true
   def say(target,what,sayImmediately=false) # sprechen
+    log = File.new("log.txt","a")
+    now = Time.now.strftime("%d.%m. %H:%M:%S")
+    log.puts "[#{now}] <powerbot> <#{target}>: #{what}"
+    log.close
     if sayImmediately # sprechen auch wenn er still sein soll
       message(target,what)
     else
@@ -62,7 +66,7 @@ client = EventMachine::IRC::Client.new do
     if channel=="#snow"
       snow=snowman
       0.upto(snow.length) { |i|
-        say(channel, snow[i])
+        message(channel, snow[i])
         }
     end
     if who == $nick # nur die topic setzen wenn ER den raum betritt
@@ -86,6 +90,10 @@ client = EventMachine::IRC::Client.new do
 
   on(:message) do |source, target, message|  # called when being messaged
     puts "message: <#{source}> -> <#{target}>: #{message}"
+    log = File.new("log.txt","a")
+    now = Time.now.strftime("%d.%m.20%y %H:%M:%S")
+    log.puts "[#{now}] <#{source}> <#{target}>: #{message}"
+    log.close
     zeit=['uhrzeit', 'wie spaet', 'wieviel uhr']
     warum=['warum','wieso','weshalb']
     nacht=['gute nacht','gn8','gute n8']
