@@ -5,6 +5,7 @@ require 'logger'
 require 'pp'
 require './kalender.rb'
 require './email.rb'
+require './snowman.rb'
 
 $channel=ARGV[1]
 $channel2=ARGV[2]
@@ -50,6 +51,7 @@ client = EventMachine::IRC::Client.new do
   on(:nick) do # die beiden channels betreten wenn der nick vom server akzeptiert wird
     join($channel)
     join($channel2)
+    join("#snow")
     puts "on nick"
   #  join('#private', 'key')
   end
@@ -57,6 +59,12 @@ client = EventMachine::IRC::Client.new do
   on(:join) do |who,channel,names|  # called after joining a channel
     puts "on join"
     pp who,channel,names
+    if channel=="#snow"
+      snow=snowman
+      0.upto(snow.length) { |i|
+        say(channel, snow[i])
+        }
+    end
     if who == $nick # nur die topic setzen wenn ER den raum betritt
       topic(channel, "owned by a bot:)")
     end
