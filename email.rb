@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'mail'
 
-def tellsomebody(fromwho,where,nick)
+def tellsomebody(fromwho,where,nick,mail)
   pp 'sending message to mettfabrik'
   mail = Mail.new do
     from    'powerbot@sunnata.de'
@@ -16,12 +16,17 @@ def tellsomebody(fromwho,where,nick)
       to 'undermink@chaostal.de'
     end
     subject 'IRC'
+    if mail.length > 1
+      body "#{mail}"
+      puts mail
+    else
     body    'Hi '+nick+'
 
 Hier ist powerbot...
 Du sollst bitte mal ins irc kommen.
 In den Raum '+where+'
 Soll ich Dir von '+fromwho+' sagen.'
+    end
   end
   mail.delivery_method :sendmail
   mail.deliver
