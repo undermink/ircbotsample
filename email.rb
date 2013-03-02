@@ -2,7 +2,7 @@
 require 'mail'
 
 def tellsomebody(fromwho,where,nick,mail)
-  pp 'sending message to mettfabrik'
+  pp 'sending message to '+nick
   mail = Mail.new do
     from    'powerbot@sunnata.de'
     case nick
