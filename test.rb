@@ -161,8 +161,9 @@ client = EventMachine::IRC::Client.new do
         end
       when /sag.*(marc|nora|simon|david).*bescheid/i
         if $known.member?(source.downcase)
+          who = $1
           mail = @message.gsub(/.*\{\{([^\}]+)\}\}.*/,'\1')
-          tellsomebody(source,target,$1,mail)
+          tellsomebody(source,target,who,mail)
           say(target,'schon passiert:)')
         else
           say(target,'hmm...nein:)')
