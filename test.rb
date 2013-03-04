@@ -37,7 +37,7 @@ client = EventMachine::IRC::Client.new do
   def say(target,what,sayImmediately=false) # sprechen
     log = File.new("log.txt","a")
     now = Time.now.strftime("%d.%m. %H:%M:%S")
-    log.puts "[#{now}] <powerbot> <#{target}>: #{what}"
+    log.puts "[#{now}][powerbot@<#{target}]: #{what}"
     log.close
     if sayImmediately # sprechen auch wenn er still sein soll
       message(target,what)
@@ -92,7 +92,7 @@ client = EventMachine::IRC::Client.new do
     puts "message: <#{source}> -> <#{target}>: #{message}"
     log = File.new("log.txt","a")
     now = Time.now.strftime("%d.%m.20%y %H:%M:%S")
-    log.puts "[#{now}] <#{source}> <#{target}>: #{message}"
+    log.puts "[#{now}][#{source}@#{target}]: #{message}"
     log.close
     zeit=['uhrzeit', 'wie spaet', 'wieviel uhr']
     warum=['warum','wieso','weshalb']
@@ -162,7 +162,7 @@ client = EventMachine::IRC::Client.new do
       when /sag.*(marc|nora|simon|david).*bescheid/i
         if $known.member?(source.downcase)
           who = $1
-          mail = @message.gsub(/.*\{\{([^\}]+)\}\}.*/,'\1')
+          mail = @message.gsub(/\{\{([^\}]+)\}\}.*/,'\1')
           tellsomebody(source,target,who,mail)
           say(target,'schon passiert:)')
         else
