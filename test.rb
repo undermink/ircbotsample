@@ -37,7 +37,7 @@ client = EventMachine::IRC::Client.new do
   def say(target,what,sayImmediately=false) # sprechen
     log = File.new("log.txt","a")
     now = Time.now.strftime("%d.%m. %H:%M:%S")
-    log.puts "[#{now}][powerbot@<#{target}]: #{what}"
+    log.puts "[#{now}][powerbot@#{target}]: #{what}"
     log.close
     if sayImmediately # sprechen auch wenn er still sein soll
       message(target,what)
