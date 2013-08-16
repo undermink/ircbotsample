@@ -11,6 +11,7 @@ $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
 $known=['thoto_', 'solo', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard', 'isaaac']
+$opqueque={}
 class Matcher # klasse zum vergleichen
   def initialize(ar)
     @ar=ar
@@ -74,6 +75,8 @@ client = EventMachine::IRC::Client.new do
     end
     say_hi=['hallo ','hey ','hi ', 'et gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag '].sample
     if $known.member?(who.downcase) then # wenn er dich kennt
+      $opqueque[who] ||= {} # Create a sub-hash unless it already exists
+      $opqueque[who][channel] ||= channel
       privmsg("nickserv", "acc "+who) # request identification status
       say(channel, say_hi+who)
     else
@@ -239,7 +242,13 @@ client = EventMachine::IRC::Client.new do
       params = hash[:params].last.split(" ")
       # op only if user is identified with services and is known
       if $known.member?(params[0].downcase) && params[1].downcase == "acc" && params[2].to_i == 3 then
-        send_data("mode "+ channel + " +o "+ params[0])
+        if $opqueque.has_key?(params[0])
+          $opqueque[params[0]].each do |index, channel|
+            send_data("mode "+ channel + " +o "+ params[0])
+            $opqueque[params[0]].delete(index)
+          end
+          $opqueque.delete(params[0])
+        end
       end
     end
     puts "parsed: #{hash[:prefix]} #{hash[:command]} #{hash[:params].join(' ')}"
