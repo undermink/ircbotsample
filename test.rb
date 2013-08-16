@@ -74,7 +74,7 @@ client = EventMachine::IRC::Client.new do
     end
     say_hi=['hallo ','hey ','hi ', 'et gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag '].sample
     if $known.member?(who.downcase) then # wenn er dich kennt
-      send_data("mode "+ channel + " +o "+ who)
+      privmsg("nickserv", "acc "+who) # request identification status
       say(channel, say_hi+who)
     else
       say(channel,"hi") # wenn nicht:)
@@ -233,6 +233,14 @@ client = EventMachine::IRC::Client.new do
   end
   # callback for all messages sent from IRC server
   on(:parsed) do |hash|
+    # search for NOTICE
+    if hash[:command] == "NOTICE" then
+      params = hash[:params].last.split(" ")
+      # op only if user is identified with services and is known
+      if $known.member?(params[0].downcase) && params[1].downcase == "acc" && params[2].to_i == 3 then
+        send_data("mode "+ channel + " +o "+ params[0])
+      end
+    end
     puts "parsed: #{hash[:prefix]} #{hash[:command]} #{hash[:params].join(' ')}"
   end
 
