@@ -10,7 +10,7 @@ require './snowman.rb'
 $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
-$known=['thoto_', 'solo', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard', 'isaaac','darkhawk']
+$known=['thoto_', 'solo', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'asdf_','sirgoofy','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'culain', 'frieda', 'exmatrikulator']
 class Matcher # klasse zum vergleichen
   def initialize(ar)
     @ar=ar
@@ -19,8 +19,8 @@ class Matcher # klasse zum vergleichen
   def ===(other)
     @ar.each{|word|
       if other=~/#{word}/ # wenn die wörter übereinstimmen
-	puts "ok #{other} #{word}"
-	return true
+        puts "ok #{other} #{word}"
+      return true
       end
     }
     false # wenn sie nicht übereinstimmen
@@ -30,8 +30,8 @@ end
 $talking=true
 
 client = EventMachine::IRC::Client.new do
-  host 'irc.chaostal.de'
-  port '6697'
+  host 'irc.freenode.net'
+  port '7000'
   realname $nick
   ssl true
   def say(target,what,sayImmediately=false) # sprechen
@@ -43,7 +43,7 @@ client = EventMachine::IRC::Client.new do
       message(target,what)
     else
       EM.add_timer(2) do # 2 sekunden warten bevor er antwortet
-	message(target,what) if $talking # und nur wenn talking = true ist
+        message(target,what) if $talking # und nur wenn talking = true ist
       end
     end
   end
@@ -55,9 +55,9 @@ client = EventMachine::IRC::Client.new do
   on(:nick) do # die beiden channels betreten wenn der nick vom server akzeptiert wird
     join($channel)
     join($channel2)
-    join("#devtal")
+ 
     puts "on nick"
-    #  join('#private', 'key')
+  #  join('#private', 'key')
   end
 
   on(:join) do |who,channel,names|  # called after joining a channel
@@ -66,8 +66,8 @@ client = EventMachine::IRC::Client.new do
     if channel=="#snow"
       snow=snowman
       0.upto(snow.length) { |i|
-	message(channel, snow[i])
-      }
+        message(channel, snow[i])
+        }
     end
     if who == $nick # nur die topic setzen wenn ER den raum betritt
       topic(channel, "owned by a bot:)")
@@ -79,13 +79,13 @@ client = EventMachine::IRC::Client.new do
     else
       say(channel,"hi") # wenn nicht:)
     end
-    #case who
-    #when / #{$known}/i
-    #  say("hi "+ who)
-    #end
-    #EM.add_timer(20,proc {
-    #  say Time.now.to_s
-    #})
+  #case who
+  #when / #{$known}/i
+  #  say("hi "+ who)
+  #end
+  #EM.add_timer(20,proc {
+  #  say Time.now.to_s
+  #})
   end
 
   on(:message) do |source, target, message|  # called when being messaged
@@ -97,7 +97,7 @@ client = EventMachine::IRC::Client.new do
     zeit=['uhrzeit', 'wie spaet', 'wieviel uhr']
     warum=['warum','wieso','weshalb']
     nacht=['gute nacht','gn8','gute n8']
-    hi=['hi','hallo','tag','tach','moin','guten morgen']
+    hi=['hi ','hallo','tag','tach','moin','guten morgen']
     say_ok=['na gut...','ok','hmm... soll ich?', source + ' echt jetzt?','ok ' + source, 'nein', 'mach doch selber ' + source,'kein bock...','warum sollte ich ' + source + '?','dafuer gibt es keinen anlass ' + source,'jaja...ok','wenn du meinst ' + source].sample
     say_why=['nun ja...', 'tja '+ source + ' ...', 'warum nicht?', source + ' warum nicht?', 'einfach so ' + source, 'das wuerdest du wohl gerne wissen, ' + source, 'warum auch nicht ' + source + '?', 'gute frage ', 'das kann ich leider nicht beantworten ' + source,'nein','ach quatsch...','ich glaub dir kein wort', 'jetzt uebertreibst du aber...','*hust*','noe...'].sample
     say_nick= ['hmm?','ja?','was?', source +'... was?', 'ja bitte '+ source + '?', 'huch...', 'oehm...', 'inwiefern ' + source + '?','*hust*','*zuck*','hae?','...',':)','oeh...','*zitter*','*zusammenzuck*'].sample
@@ -144,66 +144,66 @@ client = EventMachine::IRC::Client.new do
     @message = message.downcase
     #pp @message + ' # downcased'
     if target == $nick then
-      target = source
+    target = source
     end
     case @message
 
     when /#{$nick}/i  # nur antworten wenn der nick fällt
       case @message
       when /.*bitte.*([1-9][0-9]*).*(minute|sekunde|stunde).*ruhig/i
-	say(source,"is ja schon gut...",true)
-	$talking=false
-	pp $1 +' '+$2+' schlafen...zzzzzZZZZZZ'
-	time=$1.to_i*({"minute"=>60,"sekunde"=>1,"stunde"=>3600}[$2])
-	say(source,"dann schlafe ich jetzt #{time} sekunden",true)
-	EM.add_timer(time) do
-	  $talking=true
-	end
+        say(source,"is ja schon gut...",true)
+        $talking=false
+        pp $1 +' '+$2+' schlafen...zzzzzZZZZZZ'
+        time=$1.to_i*({"minute"=>60,"sekunde"=>1,"stunde"=>3600}[$2])
+        say(source,"dann schlafe ich jetzt #{time} sekunden",true)
+        EM.add_timer(time) do
+          $talking=true
+        end
       when /sag.*(marc|nora|simon|david).*bescheid/i
-	if $known.member?(source.downcase)
-	  who = $1
-	  mail = @message.gsub(/(.+)\{\{([^\}]+)\}\}.*/,'\2')
-	  tellsomebody(source,target,who,mail)
-	  say(target,'schon passiert:)')
-	else
-	  say(target,'hmm...nein:)')
-	end
+        if $known.member?(source.downcase)
+          who = $1
+          mail = @message.gsub(/\{\{([^\}]+)\}\}.*/,'\1')
+          tellsomebody(source,target,who,mail)
+          say(target,'schon passiert:)')
+        else
+          say(target,'hmm...nein:)')
+        end
       when /wie.*deine.*email/i
-	say(target, 'powerbot@sunnata.de warum fragst du '+source+'?')
+        say(target, 'powerbot@sunnata.de warum fragst du '+source+'?')
       when /wie sp\xC3\xA4t/i
-	say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
+        say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when ma(zeit)
-	say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
+        say(target,"wir haben " + Time.now.to_s[11,5] + "uhr und " + Time.now.to_s[17,2] + " sekunden, " + source)
       when /datum/i
-	datum=kal
-	0.upto(datum.length) { |i|
-	  say(target, datum[i])
-	}
-	#say(target, Time.now.strftime("%A, %B the %d. 20%y"))
+        datum=kal
+        0.upto(datum.length) { |i|
+        say(target, datum[i])
+        }
+        #say(target, Time.now.strftime("%A, %B the %d. 20%y"))
       when /tag.*heute/i
-	say(target, Time.now.strftime("%A..."))
+        say(target, Time.now.strftime("%A..."))
       when /sag.*was.*schlaues/i
-	say(target,say_clever)
+        say(target,say_clever)
       when ma(warum)
-	say(target,say_why)
+        say(target,say_why)
       when /wie geht/i && /dir/i
-	say(target,say_sup)
+        say(target,say_sup)
       when /wie geht\'s/
-	say(target,say_sup)
+        say(target,say_sup)
       when ma(nacht)
-	if $known.member?(source) then
-	  say(target,say_nacht)
-	else
-	  say(target,'nacht...')
-	end 
+        if $known.member?(source) then
+          say(target,say_nacht)
+        else
+          say(target,'nacht...')
+        end 
       when ma(hi)
-	say(target,say_hi)
+        say(target,say_hi)
       when /danke/i
-	say(target,say_noprob)
+        say(target,say_noprob)
       when /mach.*(mal|schon)/i
-	say(target,say_ok)
+        say(target,say_ok)
       else
-	say(target,say_nick)
+      say(target,say_nick)
       end # ende der antworten wenn der nick fällt
     when /ruby/i # antworten auch ohne den nick
       say(target,say_ruby)
@@ -221,14 +221,13 @@ client = EventMachine::IRC::Client.new do
       say(target, "ich hoer nichts " + source)
     when /ich glaub dein gen ist defekt/i
       say(target, "ich hab keine gene " + source)
-    when /schnauze/i
-      say(target,"nanana "+source)
+    when /guten morgen/i
+      say(target,"guten morgen "+source)
     when ma(nacht)
       if $known.member?(source) then
-	say(target,say_nacht)
-        EM.add_timer(60)
+        say(target,say_nacht)
       else
-	say(target,'nacht...')
+        say(target,'nacht...')
       end
     end # ende der antworten ohne nick
   end

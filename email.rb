@@ -17,8 +17,13 @@ def tellsomebody(fromwho,where,nick,mail)
     end
     subject 'IRC'
     if mail.length > 1
-      body "#{mail}"
-      puts mail
+      body "Hi "+nick+"
+      
+      Hier ist powerbot...
+      Ich sollt Dir von "+fromwho+" ausrichten:
+      #{mail}
+      Den hab ich in "+where+" getroffen:)"
+      puts body
     else
     body    'Hi '+nick+'
 
