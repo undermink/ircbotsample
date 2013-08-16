@@ -35,10 +35,10 @@ client = EventMachine::IRC::Client.new do
   realname $nick
   ssl true
   def say(target,what,sayImmediately=false) # sprechen
-    log = File.new("log.txt","a")
-    now = Time.now.strftime("%d.%m. %H:%M:%S")
-    log.puts "[#{now}][powerbot@#{target}]: #{what}"
-    log.close
+    #log = File.new("log.txt","a")
+    #now = Time.now.strftime("%d.%m. %H:%M:%S")
+    #log.puts "[#{now}][bot@#{target}]: #{what}"
+    #log.close
     if sayImmediately # sprechen auch wenn er still sein soll
       message(target,what)
     else
@@ -55,7 +55,7 @@ client = EventMachine::IRC::Client.new do
   on(:nick) do # die beiden channels betreten wenn der nick vom server akzeptiert wird
     join($channel)
     join($channel2)
- 
+    join('#devtal')
     puts "on nick"
   #  join('#private', 'key')
   end
@@ -70,14 +70,14 @@ client = EventMachine::IRC::Client.new do
         }
     end
     if who == $nick # nur die topic setzen wenn ER den raum betritt
-      topic(channel, "owned by a bot:)")
+      topic(channel, "humans suck...")
     end
     say_hi=['hallo ','hey ','hi ', 'et gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag '].sample
     if $known.member?(who.downcase) then # wenn er dich kennt
       send_data("mode "+ channel + " +o "+ who)
       say(channel, say_hi+who)
     else
-      say(channel,"hi") # wenn nicht:)
+      say(channel,"muahahaha...") # wenn nicht:)
     end
   #case who
   #when / #{$known}/i
