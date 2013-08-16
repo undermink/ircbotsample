@@ -232,7 +232,8 @@ client = EventMachine::IRC::Client.new do
     end # ende der antworten ohne nick
   end
   # callback for all messages sent from IRC server
-  on(:parsed) do |hash|
+  # Change :raw to :parsed when updating em-irc to > 0.0.2 !
+  on(:raw) do |hash|
     # search for NOTICE
     if hash[:command] == "NOTICE" then
       params = hash[:params].last.split(" ")
