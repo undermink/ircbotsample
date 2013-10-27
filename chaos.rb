@@ -227,12 +227,15 @@ client = EventMachine::IRC::Client.new do
       if $known.member?(source) then
 	say(target,say_nacht)
         $talking = False
-	EM.add_timer(60)
-	$talking = True
+	EM.add_timer(60) do
+	  $talking = true
+	end
       else
-        $talking = False
 	say(target,'nacht...')
-	$talking = True
+        $talking = False
+	EM.add_timer(60) do
+	  $talking = True
+	end
       end
     end # ende der antworten ohne nick
   end
