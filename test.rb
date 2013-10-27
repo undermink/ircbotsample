@@ -150,7 +150,8 @@ client = EventMachine::IRC::Client.new do
 
     when /#{$nick}/i  # nur antworten wenn der nick fällt
       case @message
-      when /.*bitte.*([1-9][0-9]*).*(minute|sekunde|stunde).*ruhig/i
+      when /.*bitte.*([0-9][0-9]*).*(minute|sekunde|stunde).*ruhig/i
+	 
 	say(source,"is ja schon gut...",true)
 	$talking=false
 	pp $1 +' '+$2+' schlafen...zzzzzZZZZZZ'

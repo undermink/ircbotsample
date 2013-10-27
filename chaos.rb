@@ -10,7 +10,7 @@ require './snowman.rb'
 $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
-$known=['thoto_', 'solo', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard', 'isaaac','darkhawk']
+$known=['thoto_', 'abiana', 'solo', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard', 'isaaac','darkhawk']
 class Matcher # klasse zum vergleichen
   def initialize(ar)
     @ar=ar
@@ -72,12 +72,12 @@ client = EventMachine::IRC::Client.new do
     if who == $nick # nur die topic setzen wenn ER den raum betritt
       topic(channel, "owned by a bot:)")
     end
-    say_hi=['hallo ','hey ','hi ', 'et gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag '].sample
+    say_hi=['huhu ', 'ui... ', '*wink* ', 'hallo ','hey ','hi ', 'et gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag '].sample
     if $known.member?(who.downcase) then # wenn er dich kennt
       send_data("mode "+ channel + " +o "+ who)
       say(channel, say_hi+who)
     else
-      say(channel,"hi") # wenn nicht:)
+      say(channel,"hi(:") # wenn nicht:)
     end
     #case who
     #when / #{$known}/i
@@ -226,9 +226,13 @@ client = EventMachine::IRC::Client.new do
     when ma(nacht)
       if $known.member?(source) then
 	say(target,say_nacht)
-        EM.add_timer(60)
+        $talking = False
+	EM.add_timer(60)
+	$talking = True
       else
+        $talking = False
 	say(target,'nacht...')
+	$talking = True
       end
     end # ende der antworten ohne nick
   end
