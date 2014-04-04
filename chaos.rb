@@ -10,7 +10,7 @@ require './snowman.rb'
 $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
-$known=['thoto_', 'abiana', 'solo', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard', 'isaaac','darkhawk']
+$known=['thoto_','thhunder','thhunder_','elnino86zockt','theftf', 'abiana', 'solo', 'sansor', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard', 'isaaac','darkhawk']
 class Matcher # klasse zum vergleichen
   def initialize(ar)
     @ar=ar
@@ -30,7 +30,7 @@ end
 $talking=true
 
 client = EventMachine::IRC::Client.new do
-  host 'irc.chaostal.de'
+  host 'irc.ctdo.de'
   port '6697'
   realname $nick
   ssl true
@@ -142,12 +142,17 @@ client = EventMachine::IRC::Client.new do
       Matcher.new(ar)
     end
     @message = message.downcase
+
     #pp @message + ' # downcased'
+#    if source.downcase== 'bastard'
+#      return
+#    end
+
     if target == $nick then
       target = source
     end
     case @message
-
+    
     when /#{$nick}/i  # nur antworten wenn der nick fällt
       case @message
       when /.*bitte.*([1-9][0-9]*).*(minute|sekunde|stunde).*ruhig/i
@@ -159,7 +164,7 @@ client = EventMachine::IRC::Client.new do
 	EM.add_timer(time) do
 	  $talking=true
 	end
-      when /sag.*(marc|nora|simon|david).*bescheid/i
+      when /sag.*(marc|nora|simon|david|twister|thoto|balle).*bescheid/i
 	if $known.member?(source.downcase)
 	  who = $1
 	  mail = @message.gsub(/(.+)\{\{([^\}]+)\}\}.*/,'\2')
@@ -207,8 +212,8 @@ client = EventMachine::IRC::Client.new do
       end # ende der antworten wenn der nick fällt
     when /ruby/i # antworten auch ohne den nick
       say(target,say_ruby)
-    when /chaostal/i
-      say(target,"www.chaostal.de")
+#    when /chaostal/i
+#      say(target,"www.chaostal.de")
     when /wo bin ich/i
       say(target,"hier: "+target+', '+source)
     when /wer bin ich/i
@@ -226,15 +231,13 @@ client = EventMachine::IRC::Client.new do
     when ma(nacht)
       if $known.member?(source) then
 	say(target,say_nacht)
-        $talking = False
-	EM.add_timer(60) do
-	  $talking = true
+        $talking = false
+	EM.add_timer(60) do $talking = true
 	end
       else
 	say(target,'nacht...')
-        $talking = False
-	EM.add_timer(60) do
-	  $talking = True
+        $talking = false
+	EM.add_timer(60) do $talking = true
 	end
       end
     end # ende der antworten ohne nick
