@@ -3,6 +3,7 @@
 require 'em-irc'
 require 'logger'
 require 'pp'
+require 'net/http'
 require './kalender.rb'
 require './email.rb'
 require './snowman.rb'
@@ -230,6 +231,20 @@ client = EventMachine::IRC::Client.new do
         say(target,'nacht...')
       end
     end # ende der antworten ohne nick
+
+  case message
+    when /http:\/\/(?:youtu\.be\/|(?:[a-z]{2,3}\.)?youtube\.com\/watch(?:\?|#\!)v=)([\w-]{11}).*/i
+          uid = $1
+          url = "http://gdata.youtube.com/feeds/api/videos/#{uid}"
+          begin
+            xml = Net::HTTP.get_response(URI.parse(url)).body
+            locked = Net::HTTP.get_response(URI.parse("http://gemafuck.s7t.de/?v=#{uid}&r=1")).body.force_encoding("UTF-8")
+            say(target, xml.force_encoding("UTF-8").scan(/<title.*>(.+?)<\/title>/ ).first.first + (locked == "1" ? ' (Gema locked)' : ''))
+          rescue Exception => e
+            puts "There was an error: #{e.message}"
+            puts "Invalid video it #{uid}"
+          end
+    end # ende original case
   end
   # callback for all messages sent from IRC server
   on(:parsed) do |hash|
