@@ -14,14 +14,26 @@ def tellsomebody(fromwho,where,nick,mail)
       to 'mettfabrik@sunnata.de'
     when /marc/i
       to 'undermink@chaostal.de'
+    when /twister/i
+      to 'twister@chaostal.de'
+    when /balle/i
+      to 'balle@chaostal.de'
+    when /thoto/i
+      to 'thoto@devtal.de'
     end
+
     subject 'IRC'
     if mail.length > 1
-      body "#{mail}"
-      puts mail
-    else
-    body    'Hi '+nick+'
+      body "Hi "+nick+"
 
+      Hier ist powerbot...
+      Ich sollt Dir von "+fromwho+" ausrichten:
+      #{mail}
+      Den hab ich in "+where+" getroffen:)"
+      puts body
+    else
+      body    'Hi '+nick+'
+	 
 Hier ist powerbot...
 Du sollst bitte mal ins irc kommen.
 In den Raum '+where+'
