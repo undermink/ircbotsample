@@ -12,7 +12,6 @@ $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
 $known=['thoto_','thhunder','thhunder_','elnino86zockt','theftf', 'abiana', 'solo', 'sansor', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard', 'isaaac','darkhawk']
-$opqueque={}
 class Matcher # klasse zum vergleichen
   def initialize(ar)
     @ar=ar
@@ -251,32 +250,10 @@ client = EventMachine::IRC::Client.new do
     end # ende original case
   end
   # callback for all messages sent from IRC server
-  # Change :raw to :parsed when updating em-irc to > 0.0.2 !
-  on(:raw) do |hash|
-    # search for NOTICE
-    if hash[:command] == "NOTICE" then
-      params = hash[:params].last.split(" ")
-      # op only if user is identified with services and is known
-      if $known.member?(params[0].downcase) && params[1].downcase == "acc" && params[2].to_i == 3 then
-        if $opqueque.has_key?(params[0])
-          $opqueque[params[0]].each do |index, channel|
-            send_data("mode "+ channel + " +o "+ params[0])
-            $opqueque[params[0]].delete(index)
-          end
-          $opqueque.delete(params[0])
-        end
-      end
-    end
+  on(:parsed) do |hash|
     puts "parsed: #{hash[:prefix]} #{hash[:command]} #{hash[:params].join(' ')}"
   end
 
 end
-
-=begin  on(:parsed) do |hash|
-    puts "parsed: #{hash[:prefix]} #{hash[:command]} #{hash[:params].join(' ')}"
-  end
-
-end
-=end
 
 client.run!  # start EventMachine loop
