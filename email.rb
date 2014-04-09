@@ -19,7 +19,7 @@ def tellsomebody(fromwho,where,nick,mail)
     when /balle/i
       to 'balle@chaostal.de'
     when /thoto/i
-      to 'thoto@devtal.de'
+      to 'thoto@chaostal.de'
     end
 
     subject 'IRC'
