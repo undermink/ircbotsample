@@ -235,7 +235,7 @@ client = EventMachine::IRC::Client.new do
     end # ende der antworten ohne nick
 
   case message
-    when /http:\/\/(?:youtu\.be\/|(?:[a-z]{2,3}\.)?youtube\.com\/watch(?:\?|#\!)v=)([\w-]{11}).*/i
+    when /https?:\/\/(?:youtu\.be\/|(?:[a-z]{2,3}\.)?youtube\.com\/watch(?:\?|#\!)v=)([\w-]{11}).*/i
           uid = $1
           url = "http://gdata.youtube.com/feeds/api/videos/#{uid}"
           begin
