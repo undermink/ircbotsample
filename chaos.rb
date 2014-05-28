@@ -226,12 +226,12 @@ client = EventMachine::IRC::Client.new do
       say(target,"guten morgen "+source)
      when /schnauze/i
       say(target,"nanana "+source)
-    when ma(nacht)
-      if $known.member?(source) then
-        say(target,say_nacht)
-      else
-        say(target,'nacht...')
-      end
+#    when ma(nacht)
+#      if $known.member?(source) then
+#        say(target,say_nacht)
+#      else
+#        say(target,'nacht...')
+#      end
     end # ende der antworten ohne nick
 
   case message
@@ -241,7 +241,7 @@ client = EventMachine::IRC::Client.new do
           begin
             xml = Net::HTTP.get_response(URI.parse(url)).body
             locked = Net::HTTP.get_response(URI.parse("http://gemafuck.s7t.de/?v=#{uid}&r=1")).body.force_encoding("UTF-8")
-            locked.inspect
+            say(target, YAML::dump(locked))
 	    say(target, xml.force_encoding("UTF-8").scan(/<title.*>(.+?)<\/title>/ ).first.first + (locked == "1" ? ' (Gema locked)' : ''))
           rescue Exception => e
             puts "There was an error: #{e.message}"
