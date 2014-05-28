@@ -197,7 +197,7 @@ client = EventMachine::IRC::Client.new do
       when ma(nacht)
         if $known.member?(source) then
           say(target,say_nacht)
-        else
+         else
           say(target,'nacht...')
         end 
       when ma(hi)
@@ -229,12 +229,12 @@ client = EventMachine::IRC::Client.new do
       say(target,"guten morgen "+source)
      when /schnauze/i
       say(target,"nanana "+source)
-    when ma(nacht)
-      if $known.member?(source) then
-        say(target,say_nacht)
-      else
-        say(target,'nacht...')
-      end
+#    when ma(nacht)
+#      if $known.member?(source) then
+#        say(target,say_nacht)
+#      else
+#        say(target,'nacht...')
+#      end
     end # ende der antworten ohne nick
 
   case message
