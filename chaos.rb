@@ -74,7 +74,7 @@ client = EventMachine::IRC::Client.new do
     if who == $nick # nur die topic setzen wenn ER den raum betritt
       topic(channel, "owned by a bot:)")
     end
-    say_hi=['huhu ', 'ui... ', '*wink* ', 'hallo ','hey ','hi ', 'et gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag'].sample
+    say_hi=['huhu ', 'ui... ', '*wink* ', 'hallo ','hey ','hi ', 'et gute alte ','ah... hi ','willkommen ', 'na... ', 'guten morgen ', 'nabend ', 'ach... et ', 'tag '].sample
     if $known.member?(who.downcase) then # wenn er dich kennt
       $opqueque[who] ||= {} # Create a sub-hash unless it already exists
       $opqueque[who][channel] ||= channel
@@ -225,8 +225,8 @@ client = EventMachine::IRC::Client.new do
       say(target, "ich hoer nichts " + source)
     when /ich glaub dein gen ist defekt/i
       say(target, "ich hab keine gene " + source)
-    when /guten morgen/i
-      say(target,"guten morgen "+source)
+#    when /guten morgen/i
+#      say(target,"guten morgen "+source)
      when /schnauze/i
       say(target,"nanana "+source)
 #    when ma(nacht)
@@ -244,7 +244,7 @@ client = EventMachine::IRC::Client.new do
           begin
             xml = Net::HTTP.get_response(URI.parse(url)).body
             locked = Net::HTTP.get_response(URI.parse("http://gemafuck.s7t.de/?v=#{uid}&r=1")).body.force_encoding("UTF-8")
-            locked.inspect
+            say(target, YAML::dump(locked))
 	    say(target, xml.force_encoding("UTF-8").scan(/<title.*>(.+?)<\/title>/ ).first.first + (locked == "1" ? ' (Gema locked)' : ''))
           rescue Exception => e
             puts "There was an error: #{e.message}"
