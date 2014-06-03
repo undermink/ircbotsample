@@ -101,8 +101,8 @@ client = EventMachine::IRC::Client.new do
     zeit=['uhrzeit', 'wie spaet', 'wieviel uhr']
     warum=['warum','wieso','weshalb']
     nacht=['gute nacht','gn8','gute n8']
-    hi=['hi','hallo','tag','tach','moin','guten morgen']
-    say_ok=['na gut...','ok','hmm... soll ich?', source + ' echt jetzt?','ok ' + source, 'nein', 'mach doch selber ' + source,'kein bock...','warum sollte ich ' + source + '?','dafuer gibt es keinen anlass ' + source,'jaja...ok','wenn du meinst ' + source].sample
+    hi=['huhu','hey','hallo','tag','tach','moin','guten morgen']
+    say_ok=['na gut...','ok','hmm... soll ich?', source + ' echt jetzt?','ok ' + source, 'nein', 'mach doch selber ' + source,'kein bock...','warum solltest Du ' + source + '?','dafuer gibt es keinen anlass ' + source,'jaja...ok','wenn du meinst ' + source].sample
     say_why=['nun ja...', 'tja '+ source + ' ...', 'warum nicht?', source + ' warum nicht?', 'einfach so ' + source, 'das wuerdest du wohl gerne wissen, ' + source, 'warum auch nicht ' + source + '?', 'gute frage ', 'das kann ich leider nicht beantworten ' + source,'nein','ach quatsch...','ich glaub dir kein wort', 'jetzt uebertreibst du aber...','*hust*','noe...'].sample
     say_nick= ['hmm?','ja?','was?', source +'... was?', 'ja bitte '+ source + '?', 'huch...', 'oehm...', 'inwiefern ' + source + '?','*hust*','*zuck*','hae?','...',':)','oeh...','*zitter*','*zusammenzuck*'].sample
     say_ruby= ['ruby ist toll:)','ich bin auch in ruby geschrieben...','ich mag objekte:)','ruby? find ich gut:)', 'OOP FTW', 'hab ich da ruby gehoert, ' + source + '?', 'ruby ist doch super:)'].sample
@@ -139,7 +139,9 @@ client = EventMachine::IRC::Client.new do
       'Der Mensch, der gar nichts liest, ist besser informiert als derjenige, der nur Zeitung liest.',
       'Um sicher Recht zu tun, braucht man sehr wenig vom Recht zu wissen. Allein um sicher Unrecht zu tun, muss man die Rechte studiert haben.',
       'Wo der Buerger keine Stimme hat, haben die Waende Ohren.',
-      'Ich stehe Statistiken etwas skeptisch gegenueber. Denn laut Statistik haben ein Millionaer und ein armer Kerl jeder eine halbe Million.'].sample
+      'Ich stehe Statistiken etwas skeptisch gegenueber. Denn laut Statistik haben ein Millionaer und ein armer Kerl jeder eine halbe Million.',
+      'Gehen Sie in ein Tierheim und bieten an, regelmaessig Hunde auszufuehren.',
+      'Gehen Sie in ein Tierheim und bieten an, regelmaessig mit den Katzen dort zu spielen.'].sample
     say_noprob=['kein thema '+source,'gerne '+source,'bitte '+source,'kein problem '+source,'null problemo...','ist doch selbstverstaendlich:)','nichts zu danken '+source,'selbstverstaendlich '+source].sample
 
     def ma(ar) # funktion zum vergleichen von wörtern mit der klasse von oben
@@ -206,8 +208,14 @@ client = EventMachine::IRC::Client.new do
         say(target,say_noprob)
       when /mach.*(mal|schon)/i
         say(target,say_ok)
+      when /tierheim/i
+	say(target, 'Gehen Sie in ein Tierheim und bieten an, regelmaessig Hnde auszufuehren.')
+      when /gib.*mal.*rat/i
+	say(target,'Gehen Sie in ein Tierheim und bieten an, regelmaessig Hunde auszufuehren.')
+      when /soll.*ich.*/i
+	say(target,'ja')
       else
-      say(target,say_nick)
+        say(target,say_nick)
       end # ende der antworten wenn der nick fällt
     when /ruby/i # antworten auch ohne den nick
       say(target,say_ruby)
@@ -244,8 +252,8 @@ client = EventMachine::IRC::Client.new do
           begin
             xml = Net::HTTP.get_response(URI.parse(url)).body
             locked = Net::HTTP.get_response(URI.parse("http://gemafuck.s7t.de/?v=#{uid}&r=1")).body.force_encoding("UTF-8")
-            say(target, YAML::dump(locked))
 	    say(target, xml.force_encoding("UTF-8").scan(/<title.*>(.+?)<\/title>/ ).first.first + (locked == "1" ? ' (Gema locked)' : ''))
+            #say(target, YAML::dump(locked))
           rescue Exception => e
             puts "There was an error: #{e.message}"
             puts "Invalid video it #{uid}"
