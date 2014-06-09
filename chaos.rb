@@ -11,8 +11,9 @@ require './snowman.rb'
 $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
-$known=['thoto_','thhunder','thhunder_','elnino86zockt','theftf', 'abiana', 'solo', 'sansor', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard', 'isaaac','darkhawk']
+$known=['marc','thoto_','thhunder','thhunder_','elnino86zockt','theftf', 'abiana', 'solo', 'sansor', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard', 'isaaac','darkhawk']
 $opqueque={}
+$notice={}
 class Matcher # klasse zum vergleichen
   def initialize(ar)
     @ar=ar
@@ -82,6 +83,11 @@ client = EventMachine::IRC::Client.new do
       say(channel, say_hi+who)
     else
       say(channel,"hi") # wenn nicht:)
+    end
+    if $notice.has_key?(who.downcase) then
+      $notice[who].each { |bywho,msg| say(who,msg) }
+      $notice[who] = {}
+      #say(who,$notice[who])
     end
   #case who
   #when / #{$known}/i
@@ -165,6 +171,25 @@ client = EventMachine::IRC::Client.new do
         EM.add_timer(time) do
           $talking=true
         end
+      when /wenn.*(marc|balle|undermink|thoto|maniactwister|abiana|godrin|nora|endres|thhunder|step21|theftf|sansor).*wiederkommt.*sag/i
+	if $known.member?(source.downcase)
+	  who = $1
+	  wwho = $known.member?(message.downcase)
+	  what = @message.gsub(/(.+)\{\{([^\}]+)\}\}.*/,'\2')
+	  $notice[who] ||= {}
+	  if $notice[who][source] != nil
+	    msg = ' und : ' + what
+	    $notice[who][source] += msg
+	  else
+	    msg = 'Ich soll Dir von '+source+' sagen: '+what
+	    $notice[who][source] = msg
+	  end
+	  pp $notice
+	  pp wwho
+	  say(target,'klar.. mach ich')
+	else
+	  say(target,'nein :P')
+	end
       when /sag.*(marc|nora|simon|david|twister|balle|thoto).*bescheid/i
         if $known.member?(source.downcase)
           who = $1
