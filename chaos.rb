@@ -4,10 +4,11 @@ require 'em-irc'
 require 'logger'
 require 'pp'
 require 'net/http'
+require 'rss'
+require 'open-uri'
 require './kalender.rb'
 require './email.rb'
 require './snowman.rb'
-
 $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
@@ -299,6 +300,25 @@ client = EventMachine::IRC::Client.new do
             $opqueque[params[0]].delete(index)
           end
           $opqueque.delete(params[0])
+        end
+      end
+    elsif hash[:command] == "PING" then
+      begin
+        lastcheck = File.read("./bastard-rss").to_i
+      rescue
+        lastcheck = 0
+      end
+
+
+      url = 'http://www.chaostal.de/rss'
+      open(url) do |rss|
+        feed = RSS::Parser.parse(rss)
+        lastdate = feed.channel.lastBuildDate.to_i
+        if lastdate > lastcheck then
+          File.open("/tmp/bastard-rss", 'w+') {|f| f.write(lastdate) }
+          feed.items.each do |item|
+            say("#chaostal", "[Neuer Artikel] #{item.title} - #{item.link}")
+          end
         end
       end
     end
