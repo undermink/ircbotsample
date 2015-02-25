@@ -1,11 +1,13 @@
 #!/usr/bin/env ruby
 
+
 require 'em-irc'
 require 'logger'
 require 'pp'
 require 'net/http'
 require 'rss'
-require 'open-uri'
+require "open-uri"
+require "nokogiri"
 require './kalender.rb'
 require './email.rb'
 require './snowman.rb'
@@ -285,7 +287,17 @@ client = EventMachine::IRC::Client.new do
             puts "Invalid video it #{uid}"
           end
     end # ende original case
+    urls = @message.split(/\s+/).find_all { |u| u =~ /^https?:/ }
+    urls.each do |url|
+      Nokogiri::HTML(open(url))
+      if node = html.at_xpath("html/head/title")
+        say(target,"Titke: #{node.text}")
+      end
+    end
   end
+
+
+
   # callback for all messages sent from IRC server
   # Change :raw to :parsed when updating em-irc to > 0.0.2 !
   on(:raw) do |hash|
