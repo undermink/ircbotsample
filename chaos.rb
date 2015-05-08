@@ -327,7 +327,7 @@ client = EventMachine::IRC::Client.new do
         feed = RSS::Parser.parse(rss)
         lastdate = feed.channel.lastBuildDate.to_i
         if lastdate > lastcheck then
-          File.open("/tmp/bastard-rss", 'w+') {|f| f.write(lastdate) }
+          File.open("./bastard-rss", 'w+') {|f| f.write(lastdate) }
           feed.items.each do |item|
             say("#chaostal", "[Neuer Artikel] #{item.title} - #{item.link}")
           end
