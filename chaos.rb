@@ -1,20 +1,20 @@
 #!/usr/bin/env ruby
 
-
 require 'em-irc'
 require 'logger'
 require 'pp'
 require 'net/http'
 require 'rss'
-require "open-uri"
-require "nokogiri"
+require 'open-uri'
+require 'nokogiri'
 require './kalender.rb'
 require './email.rb'
 require './snowman.rb'
+
 $channel=ARGV[1]
 $channel2=ARGV[2]
 $nick=ARGV[0]
-$known=['marc','thoto_','thhunder','thhunder_','elnino86zockt','theftf', 'abiana', 'solo', 'sansor', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard', 'isaaac','darkhawk']
+$known=['bspar','int80','jt','ex','nilsarne','step21','fotojunkie','jenni','jenni_','DFens','rinnegan-drache','marc','thoto_','thhunder','thhunder_','elnino86zockt','theftf', 'abiana', 'solo', 'sansor', 'endres', 'asdf_', 'maniactwister', 'scirocco', 'sn0wdiver', 'nilsarne', 'mettfabrik','nora','underm|nk','godrin', 'godrin_',  'undermink', 'thoto', 'balle', 'bastard', 'isaaac','darkhawk']
 $opqueque={}
 $notice={}
 class Matcher # klasse zum vergleichen
@@ -36,6 +36,8 @@ end
 $talking=true
 
 client = EventMachine::IRC::Client.new do
+
+  ytapikey = 'PUT IT IN!!!'
   host 'irc.chaostal.de'
   port '6697'
   realname $nick
@@ -174,26 +176,26 @@ client = EventMachine::IRC::Client.new do
         EM.add_timer(time) do
           $talking=true
         end
-      when /wenn.*(marc|balle|undermink|thoto|maniactwister|abiana|godrin|nora|endres|thhunder|step21|theftf|sansor).*wiederkommt.*sag/i
-	if $known.member?(source.downcase)
-	  who = $1
-	  wwho = $known.member?(message.downcase)
-	  what = @message.gsub(/(.+)\{\{([^\}]+)\}\}.*/,'\2')
-	  $notice[who] ||= {}
-	  if $notice[who][source] != nil
-	    msg = ' und : ' + what
-	    $notice[who][source] += msg
-	  else
-	    msg = 'Ich soll Dir von '+source+' sagen: '+what
-	    $notice[who][source] = msg
-	  end
-	  pp $notice
-	  pp wwho
-	  say(target,'klar.. mach ich')
-	else
-	  say(target,'nein :P')
-	end
-      when /sag.*(marc|nora|simon|david|twister|balle|thoto).*bescheid/i
+      when /wenn.*(marc|jenni|thhunder|rinnegan-drache|jt|int80|bspar|fotojunkie|darkhawk|nilsarne|ex|solo|balle|undermink|thoto|maniactwister|abiana|godrin|nora|endres|thhunder|step21|theftf|sansor).*wiederkommt.*sag/i
+  if $known.member?(source.downcase)
+    who = $1
+    wwho = $known.member?(message.downcase)
+    what = @message.gsub(/(.+)\{\{([^\}]+)\}\}.*/,'\2')
+    $notice[who] ||= {}
+    if $notice[who][source] != nil
+      msg = ' und : ' + what
+      $notice[who][source] += msg
+    else
+      msg = 'Ich soll Dir von '+source+' sagen: '+what
+      $notice[who][source] = msg
+    end
+    pp $notice
+    pp wwho
+    say(target,'klar.. mach ich')
+  else
+    say(target,'nein :P')
+  end
+      when /sag.*(marc|jenni|thhunder|nora|simon|david|solo|twister|balle|thoto).*bescheid/i
         if $known.member?(source.downcase)
           who = $1
           mail = @message.gsub(/(.+)\{\{([^\}]+)\}\}.*/,'\2')
@@ -237,11 +239,17 @@ client = EventMachine::IRC::Client.new do
       when /mach.*(mal|schon)/i
         say(target,say_ok)
       when /tierheim/i
-	say(target, 'Gehen Sie in ein Tierheim und bieten an, regelmaessig Hnde auszufuehren.')
+  say(target, 'Gehen Sie in ein Tierheim und bieten an, regelmaessig Hnde auszufuehren.')
       when /gib.*mal.*rat/i
-	say(target,'Gehen Sie in ein Tierheim und bieten an, regelmaessig Hunde auszufuehren.')
+  say(target,'Gehen Sie in ein Tierheim und bieten an, regelmaessig Hunde auszufuehren.')
       when /soll.*ich.*/i
-	say(target,'ja')
+  say(target,'ja')
+      when /ist.*devtal.*offen.*?/i
+       open('http://devtal.de/~thoto/dtst.txt') do |f|
+         f.each do |line|
+           say(target,"Es sieht so aus als waere das /dev/tal gerade "+line)
+   end
+       end
       else
         say(target,say_nick)
       end # ende der antworten wenn der nick fällt
@@ -276,25 +284,36 @@ client = EventMachine::IRC::Client.new do
   case message
     when /https?:\/\/(?:youtu\.be\/|(?:[a-z]{2,3}\.)?youtube\.com\/watch(?:\?|#\!)v=)([\w-]{11}).*/i
           uid = $1
-          url = "http://gdata.youtube.com/feeds/api/videos/#{uid}"
+          url = "https://www.googleapis.com/youtube/v3/videos?id=#{uid}&key=#{ytapikey}&fields=items%28snippet%28title%29%29&part=snippet"
           begin
-            xml = Net::HTTP.get_response(URI.parse(url)).body
+            json = JSON.parse(Net::HTTP.get_response(URI.parse(url)).body)
             locked = Net::HTTP.get_response(URI.parse("http://gemafuck.s7t.de/?v=#{uid}&r=1")).body.force_encoding("UTF-8")
-	    say(target, xml.force_encoding("UTF-8").scan(/<title.*>(.+?)<\/title>/ ).first.first + (locked == "1" ? ' (Gema locked)' : ''))
+      say(target, json['items'][0]['snippet']['title'] + (locked == "1" ? ' (Gema locked)' : ''))
+            #say(target, YAML::dump(locked)) ''))
+      quiet = true
             #say(target, YAML::dump(locked))
           rescue Exception => e
             puts "There was an error: #{e.message}"
             puts "Invalid video it #{uid}"
           end
     end # ende original case
-    urls = @message.split(/\s+/).find_all { |u| u =~ /^https?:/ }
+  begin
+    urls = @message.split(/\s+/).find_all { |u| u =~ /^https?:\/\// }
     urls.each do |url|
-      Nokogiri::HTML(open(url))
+      html = Nokogiri::HTML(open(url))
       if node = html.at_xpath("html/head/title")
-        say(target,"Titke: #{node.text}")
+  if quiet != true
+          say(target,"Title: #{node.text}")
+  else
+    quiet == false
+  end
       end
     end
+  rescue
+    pp "error while parsing http-title"
   end
+end
+
 
 
 
@@ -316,12 +335,12 @@ client = EventMachine::IRC::Client.new do
       end
     elsif hash[:command] == "PING" then
       begin
-        lastcheck = File.read("./bastard-rss").to_i
+     #   lastcheck = File.read("./bastard-rss").to_i
       rescue
-        lastcheck = 0
+     #   lastcheck = 0
       end
 
-
+=begin
       url = 'http://www.chaostal.de/rss'
       open(url) do |rss|
         feed = RSS::Parser.parse(rss)
@@ -333,6 +352,7 @@ client = EventMachine::IRC::Client.new do
           end
         end
       end
+=end      
     end
     puts "parsed: #{hash[:prefix]} #{hash[:command]} #{hash[:params].join(' ')}"
   end
