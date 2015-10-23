@@ -89,9 +89,9 @@ client = EventMachine::IRC::Client.new do
   end
 
   on(:message) do |source, target, message|  # called when being messaged
-    puts "message: <#{source}> -> <#{target}>: #{message}"
     #log = File.new("log.txt","a")
     now = Time.now.strftime("%d.%m.20%y %H:%M:%S")
+    puts "message: [#{now}] <#{source}> -> <#{target}>: #{message}"
     #log.puts "[#{now}][#{source}@#{target}]: #{message}"
     #log.close
     zeit=['uhrzeit', 'wie spaet', 'wieviel uhr']
