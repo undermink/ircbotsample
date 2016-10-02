@@ -164,7 +164,7 @@ client = EventMachine::IRC::Client.new do
 	EM.add_timer(time) do
 	  $talking=true
 	end
-      when /sag.*(marc|nora|simon|david|twister|thoto|balle).*bescheid/i
+      when /sag.*(marc|nora|simon|david|maniactwister|thoto|balle).*bescheid/i
 	if $known.member?(source.downcase)
 	  who = $1
 	  mail = @message.gsub(/(.+)\{\{([^\}]+)\}\}.*/,'\2')
