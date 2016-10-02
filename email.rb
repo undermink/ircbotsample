@@ -15,7 +15,7 @@ def tellsomebody(fromwho,where,nick,mail)
     when /marc/i
       to 'undermink@chaostal.de'
      when /twister/i
-      to 'twister@chaostal.de'
+      to 'maniactwister@chaostal.de'
     when /balle/i
       to 'balle@chaostal.de'
     when /thoto/i
